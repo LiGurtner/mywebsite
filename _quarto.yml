@@ -1,0 +1,67 @@
+# This file controls the settings for your Quarto template. Modified from www.marvinschmitt.com
+
+# website settings
+website:
+  title: "Lilla Gurtner"  # Your name
+  description: "Psychology and Sustainability"   # A brief slogan (optional)
+  
+  # start of the navigation bar at the top of the website
+  navbar:
+    pinned: true
+    
+    # your sub-pages
+    left:
+      - text: "Research"
+        href: research/index_research.qmd
+      - text: "Publications"
+        href: publications/index_pub.qmd
+      - text: "Classes - Syllabus"
+        menu:
+          - text: "Data literacy"
+            href: classes/Data_literacy/index_data_lit.qmd
+          - text: "Psychology and Sustainability"
+            href: classes/SustainabANDpsy/Syllabus_Psychology_Sustainability.qmd
+      - text: "CV"
+        href: cv/index_cv.qmd
+        # your social media handles
+    right:
+      - icon: envelope
+        aria-label: email
+        href: "mailto:lilla.gurtner2@unibe.ch"  
+      
+  
+  
+
+# Don't touch unless you know what you are doing :) ------------
+  search: 
+    location: navbar
+    type: textbox
+  page-footer: 
+    left: |
+      <span class="faux-block">&#169; 2024 Lilla Gurtner CC BY-NC 4.0</span>
+      
+project:
+  type: website
+  output-dir: docs
+
+  preview: 
+    port: 22222
+    browser: true
+    watch-inputs: true
+    navigate: true
+
+execute:
+  freeze: false
+
+format:
+  html:
+    fontsize: 1.1em
+    theme: 
+      - pulse # 
+      - html/styles.scss
+    toc: false
+    code-link: true
+    anchor-sections: true
+    fig-cap-location: margin
+    reference-location: margin
+    footnotes-hover: true

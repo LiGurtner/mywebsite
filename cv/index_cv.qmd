@@ -1,0 +1,167 @@
+---
+layout: page
+title: curriculum vitae
+excerpt: My current CV
+engine: knitr 
+toc: true
+toc-location: left
+toc-title: curriculum vitae
+editor_options: 
+  chunk_output_type: console
+---
+
+```{css echo=FALSE}
+
+```
+
+```{r, echo = F}
+# knitr global options ----
+knitr::opts_chunk$set(fig.pos = 'H',
+                      echo = F,
+                      message = F,
+                      warning = F, 
+                      dpi = 600,
+                      fig.align = "center", 
+                      fig.asp = 0.62) # golden ratio
+```
+
+
+## Education
+```{r}
+edu <- read.csv("edu.csv") 
+names(edu) <- NULL 
+kableExtra::kable(edu, kable_format = "html", align = c("r", "l")) |> 
+  kableExtra::column_spec(1, 
+                          width_min = "4cm") |> 
+  kableExtra::row_spec(row = 1:10, extra_css = "line-height: 1.2;
+                       padding: 10px")
+```
+
+## Employment
+
+```{r}
+empl <- read.csv("employ.csv") 
+names(empl) <- NULL 
+kableExtra::kable(empl, kable_format = "html", align = c("r", "l")) |> 
+  kableExtra::column_spec(1, 
+                          width_min = "4cm") |> 
+  kableExtra::row_spec(row = 1:10, extra_css = "line-height: 1.2;
+                       padding: 10px") |> 
+  kableExtra::row_spec(row = c(4,6, 8, 10), bold = TRUE, italic = T, color = "grey")
+```
+
+
+## Teaching 
+
+```{r}
+teach <- read.csv("Teach.csv") 
+names(teach) <- NULL 
+
+urls <- c("https://www.bne.unibe.ch/unibe/portal/microsites/BNE/content/e497827/e608437/e721277/e955542/pane1150436/e1144780/Abstract_Conclusion_FNE_Gurtner_ger.pdf", 
+          "", # data literacy class 
+          "https://osf.io/78ct6/") # psy and sust class)
+
+kableExtra::kable(teach, kable_format = "html", align = c("r", "l")) |> 
+  kableExtra::column_spec(1, 
+                          width_min = "4cm") |> 
+  kableExtra::row_spec(row = 1:10, 
+                       extra_css = "line-height: 1.2;
+                       padding: 10px") |> 
+  kableExtra::row_spec(1, hline_after = T)
+```
+
+## Personal competences
+
+```{r}
+
+persComp <- read.csv("persComp.csv") 
+names(persComp) <- NULL 
+kableExtra::kable(persComp, kable_format = "html") |> 
+  kableExtra::column_spec(1, 
+                          width_min = "4cm") 
+```
+
+## Outreach activities
+
+- Member of researcher panel in the [„stories for future“ project](https://storiesforfuture.ch/) (since 2024)
+- Presentation in the Eco Summer Camp (2024)
+- Leader of Podcast [„Zukunftswerkstatt - Ideas and Pathways to tomorrow“](https://www.podcast.de/podcast/3277597/zukunftswerkstatt-ideen-und-wege-ins-morgen) (German, since 2023)
+- Presentation in the Eco Summer Camp (2023)
+- Participation in panel discussion on Sustainability, Environmental Group Belp (2023)
+- Franxini Nano talk: [“Yes we can - combat climate change with our brains”](https://www.youtube.com/watch?v=uhaeB4taTZk) (2021)
+- Public talk at Quadrat: [“Where can we go with this brain?”](https://www.youtube.com/watch?v=SnURgaTHwEA) (talk in Swissgerman, 2021)
+- Proofread “Die Gretchenfrage im 21. Jahrhundert“ by Markus Neuenschwander (2020)
+- Proofread [“Black mamba - or the power of imagination“](https://www.herder.de/leben/shop/p6/58389-black-mamba-oder-die-macht-der-imagination-ebook-epub/) by Prof. Fred Mast (2020)
+
+
+
+
+
+<!-- **Doctor of Philosophy -- Econometrics and Business Statistics** <br> *Monash University* [*Aug 2021 --- Present*]{.cvdate} -->
+
+<!-- -   New principles and methods for complex data preparation and integration, with applications to official statistics, web-scrapped data and satellite raster images -->
+<!-- -   Monash Data Futures Institute PhD Top-Up Scholarship (2021-2024) -->
+<!-- -   Expected submission date: Nov 2024 -->
+
+
+
+
+
+<!-- ::: {.print-only .contact-block} -->
+<!-- cynthia.huang@monash.edu -->
+<!-- ::: -->
+
+<!-- ## EDUCATION -->
+
+<!-- **Doctor of Philosophy -- Econometrics and Business Statistics** <br> *Monash University* [*Aug 2021 --- Present*]{.cvdate} -->
+
+<!-- -   New principles and methods for complex data preparation and integration, with applications to official statistics, web-scrapped data and satellite raster images -->
+<!-- -   Monash Data Futures Institute PhD Top-Up Scholarship (2021-2024) -->
+<!-- -   Expected submission date: Nov 2024 -->
+
+<!-- ## WORK EXPERIENCE{style="page-break-before: always"} -->
+
+<!-- ### Data Scientist -->
+
+<!-- ***Freelance, Multiple Clients*** [Jan 2020 -- June 2021]{.cvdate} -->
+
+<!-- Providing data collection, pre-processing, exploratory analysis and modelling services to clients in the early R&D stages of developing data driven products. Projects include: -->
+
+<!-- -   Data description and preliminary product feasibility insights for a start-up real estate bond platform; including assessing suitability of various property transaction databases for use in initial product prototype. -->
+<!-- -   Development of statistical anomaly detection regimes and key historical insights from internet quality time-series data for use in parametric insurance products, including documenting analysis tools in an R package. -->
+
+<!-- ::: {.no-print} -->
+<!-- ## PRESENTATIONS AND WORKSHOPS -->
+
+<!-- -   Talk: [Misadventures with Reproducibility in R](https://github.com/cynthiahqy/rladies-2022-11) (30 Nov 2022, R Ladies Melbourne Meetup) -->
+<!-- -   Talk: [Designing R Packages](https://github.com/cynthiahqy/design-r-magic_2022-10) (4 Oct 2022, Monash EBS Data Science Research Software Study Group) -->
+<!-- -   Talk: [Quarto Websites as Research Compendiums](https://github.com/cynthiahqy/quarto-wiki-template) (16 Aug 2022, Monash EBS Data Science Research Software Study Group) -->
+<!-- -   Workshop: [Writing academic papers with Rmarkdown and friends](https://www.cynthiahqy.com/posts/r-markdown-and-friends/) (9 Aug 2022, Monash University) -->
+<!-- ::: -->
+
+<!-- ::: {.print-only} -->
+<!-- ## References -->
+<!-- Available upon request -->
+<!-- ::: -->
+
+
+
+
+<!-- ```{=html} -->
+<!-- <p class="text-center"> -->
+<!--   <a class="btn btn-primary btn-lg cv-download" href="`r rmarkdown::metadata$cv$pdf`" target="_blank"> -->
+<!--     <i class="fa-solid fa-file-arrow-down"></i>&ensp;Download current CV -->
+<!--   </a> -->
+<!-- </p> -->
+<!-- <div class="embed-container"> -->
+<!--   <iframe src="`r rmarkdown::metadata$cv$pdf`#toolbar=0" style="border: 0.5px;width: 100%;"></iframe> -->
+<!-- </div> -->
+<!-- ``` -->
+
+
+
+<!-- ```{=html} -->
+<!-- <div  style="margin: 30px; text-align: center;"> -->
+<!-- <a class="btn btn-primary" href="https://www.marvinschmitt.com/blog/website-tutorial-quarto/" role="button" target="_blank" style="padding: 15px 30px;">View the tutorial for this template (+ download link)</a> -->
+<!-- </div> -->
+<!-- ``` -->

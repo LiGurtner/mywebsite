@@ -1,0 +1,20 @@
+---
+title: Projects
+---
+
+## Commonpaths Project
+
+The [CommonPaths](https://commonpaths.unibe.ch/) project is a research initiative backed by the Swiss National Science Foundation. It brings together researchers from Switzerland, Ghana, the UK, Italy, the Netherlands and Austria to explore urban commons and their contribution to sustainability.  
+
+#### What are “ urban commons”? {.unnumbered} 
+
+We define “urban commons” as a resource that is self-managed by a community of users in an urban setting. One example for urban commons are housing cooperatives that operate on a cost-rent basis. These cooperatives provide affordable housing possibilities without a profit imperative. Other examples include community-supported agriculture or urban gardening initiatives, who provide local and seasonal food and often operate with agroecological principles in mind.  
+
+The Commonpaths-Project focuses on how these commons can help reduce our reliance on market-driven systems for provisioning of (essential) goods such as housing, food, and green spaces, a process known as de-commodification. As part of the "Behavioural perspective-WP", I investigate the role of trust, self-efficacy and norms/values in the self-organizing activities of commoners. 
+
+
+----
+
+## Rethinkig statistics
+
+Together with two PhD-students from the Commonpaths-Project, we are in the process of going through Richard McElreath's "Rethinking statistics" and publish brms-tidyverse-ish solutions to his exercises [here](https://ligurtner.github.io/Rethinking_exercises/Home.html)

@@ -1,0 +1,26 @@
+{
+  "research/index_research.qmd": {
+    "index_research.html": "2420f57a"
+  },
+  "404.qmd": {
+    "404.html": "2e4429d0"
+  },
+  "classes/Data_literacy/index_data_lit.qmd": {
+    "index_data_lit.html": "6685e766"
+  },
+  "classes/SustainabANDpsy/Syllabus_Psychology_Sustainability.qmd": {
+    "Syllabus_Psychology_Sustainability.html": "503eecec"
+  },
+  "publications/index_pub.qmd": {
+    "index_pub.html": "c153d2de"
+  },
+  "index.qmd": {
+    "index.html": "660e5116"
+  },
+  "cv/index_cv.qmd": {
+    "index_cv.html": "3b7008eb"
+  },
+  "cv/index.ipynb": {
+    "index.html": "6a801be1"
+  }
+}
