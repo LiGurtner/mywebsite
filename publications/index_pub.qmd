@@ -10,7 +10,6 @@ editor_options:
 
 ## Peer-reviewed papers
 
-
 Aggrey, V., Pedrazzini, S., **Gurtner, L.**, & Moser, S. (2024). What Motivates Individuals or Groups to Engage in Commons Initiatives? A Scoping Review. [[link]](https://doi.org/10.23668/PSYCHARCHIVES.15504)
 
 
