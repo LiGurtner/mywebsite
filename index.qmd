@@ -11,6 +11,26 @@ about:
       text: I am not on social media
 ---
 
+
+<!---
+workflow: 
+- change in CV: 
+  - add new line to .csv files in cv/[].csv
+  - render website
+  - add / commit / push
+  
+  
+- change in publications: and others
+  - add new item in publications/index_pub.qmd
+  - render website
+  - add / commi / push
+  
+  
+  
+
+--->
+
+
 ::: {#about-block}
 :::
 
