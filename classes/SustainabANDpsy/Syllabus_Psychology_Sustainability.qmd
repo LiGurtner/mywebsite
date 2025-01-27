@@ -129,7 +129,6 @@ The proseminar is pass-or-fail.
 
 #### Further reading
 
--   Career advice: Pragmatic and focused on the long-term impact of your work: [web-page](https://80000hours.org/make-a-difference-with-your-career/), [or as a podcast](https://80000hours.org/podcast/episodes/ben-todd-key-ideas-of-80000hours/)
 
 -   The 7 dragons of inaction: @Gifford2018 (an answer to these dragons will be presented in the session on motivated reasoning, @Atkinson2021)
 :::
