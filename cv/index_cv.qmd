@@ -85,7 +85,7 @@ kableExtra::kable(persComp, kable_format = "html") |>
 
 - Member of researcher panel in the [„stories for future“ project](https://storiesforfuture.ch/) (since 2024)
 - Presentation in the Eco Summer Camp (2024)
-- Leader of Podcast [„Zukunftswerkstatt - Ideas and Pathways to tomorrow“](https://www.podcast.de/podcast/3277597/zukunftswerkstatt-ideen-und-wege-ins-morgen) (German, since 2023)
+- Leader & Producer of Podcast [„Zukunftswerkstatt - Ideas and Pathways to tomorrow“](https://www.podcast.de/podcast/3277597/zukunftswerkstatt-ideen-und-wege-ins-morgen) (German, since 2023)
 - Presentation in the Eco Summer Camp (2023)
 - Participation in panel discussion on Sustainability, Environmental Group Belp (2023)
 - Franxini Nano talk: [“Yes we can - combat climate change with our brains”](https://www.youtube.com/watch?v=uhaeB4taTZk) (2021)

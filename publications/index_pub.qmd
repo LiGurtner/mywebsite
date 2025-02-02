@@ -10,6 +10,10 @@ editor_options:
 
 ## Peer-reviewed papers
 
+
+Ertl, M., & **Gurtner, L. M.** (2025). Human sciences can increase technology acceptance in rehabilitation science: A call for action. Frontiers in Rehabilitation Sciences, 5, 1356445. [[link]](https://doi.org/10.3389/fresc.2024.1356445)
+
+
 Aggrey, V., Pedrazzini, S., **Gurtner, L.**, & Moser, S. (2024). What Motivates Individuals or Groups to Engage in Commons Initiatives? A Scoping Review. [[link]](https://doi.org/10.23668/PSYCHARCHIVES.15504)
 
 
@@ -34,10 +38,9 @@ Martarelli, C. S., **Gurtner, L.** M., & Mast, F. W. (2015). School-age children
 
 ##  Conference contributions
 
-**Gurtner, Lilla**; Liz, Tianzhu; Gammelgaard, Johanna (Sept 2024). How can commons contribute to a transformation towards degrowth?. In: 16th International Social Innovation Research Conference. Bern 2 - 4. 09.2024
+**Gurtner, Lilla**; Liu, Tianzhu; Gammelgaard, Johanna (Sept 2024). How can commons contribute to a transformation towards degrowth?. In: 16th International Social Innovation Research Conference. Bern 2 - 4. 09.2024
 
-Pedrazzini, Sabina; **Gurtner, Lilla** (June 2024). Navigating Challenges in Commoning Processes: Understanding Individual Dynamics. In: Symposium: What we talk about when we talk about the commons? Leeds. 17 - 18. 06.2024.
-
+Pedrazzini, Sabina; **Gurtner, Lilla** (June 2024). Navigating Challenges in Commoning Processes: Understanding Individual Dynamics. In: Symposium: What we talk about when we talk about the commons? Leeds. 17 - 18. 06.2024. [link](https://stage.leeds.ac.uk/events/sadler-seminar-series-what-we-talk-about-when-we-talk-about-the-commons/) 
 
 **Gurtner, Lilla**; Moser, Stephanie (June 2023). The where to, how and who of mitigating climate change: a targeted research agenda for psychology to support social transitions. In: ICEP Conference. Aarhus. 20-23. 06.2023. 
 
