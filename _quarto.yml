@@ -21,6 +21,8 @@ website:
             href: classes/Data_literacy/index_data_lit.qmd
           - text: "Psychology and Sustainability"
             href: classes/SustainabANDpsy/Syllabus_Psychology_Sustainability.qmd
+          - text: "Fake-news Game"
+            href: classes/fake-news-game/fake-news-game.qmd
       - text: "CV"
         href: cv/index_cv.qmd
         # your social media handles

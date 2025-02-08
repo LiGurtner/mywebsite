@@ -22,5 +22,16 @@
   },
   "cv/index.ipynb": {
     "index.html": "6a801be1"
+  },
+  "classes/fake-news-game/fake-news-game.qmd": {
+    "fake-news-game.html": "bd9e2ba8"
+  },
+  "Textprezi.qmd": {
+    "Textprezi.pptx": "4591cde2"
+  },
+  "classes/fake-news-game/Textprezi.qmd": {
+    "Textprezi.pptx": "0ac49098",
+    "Textprezi.tex": "b1408ed9",
+    "Textprezi.html": "972d10c3"
   }
 }
