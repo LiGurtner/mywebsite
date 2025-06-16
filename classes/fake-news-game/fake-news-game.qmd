@@ -17,89 +17,83 @@ toc: true
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+In this game, students will produce a fake-news article, coming from a specific point of few and to a specific topic.
 
+**why?** Because by producing fake-news themselves, students "inoculate" themselves against mis- and disinformation [@Lu2023].
 
-In this game, students will produce a fake-news article, coming from a specific point of few and to a specific topic. 
-
-**why?** Because by producing fake-news themselves, students "inoculate" themselves against mis- and disinformation [@Lu2023]. 
-
-**how?** In groups of 2-3, students will all start with the same information (see [Information - Issue](#info)), but will have different roles or characters (see [Roles](#roles)). They use this role to craft one online-article per group, using the information provided, but with the intentions/motivations of their specific role. 
+**how?** In groups of 2-3, students will all start with the same information (see [Information - Issue](#info)), but will have different roles or characters (see [Roles](#roles)). They use this role to craft one online-article per group, using the information provided, but with the intentions/motivations of their specific role.
 
 The game is a variation of the fake news game presented in @Roozenbeek2019.
 
-
 ## Instuction
 
-- Read the description of your assigned [role](#roles) and the [information](#info) about the issue.
+-   Read the description of your assigned [role](#roles) and the [information](#info) about the issue.
 
-- Agree in the group about your character: formulate their interest for the issue, their motivations, why they think how they think.
+-   Agree in the group about your character: formulate their interest for the issue, their motivations, why they think how they think.
 
-- Start outlining the article (see [Structure of the article](#structurearticle)).
+-   Start outlining the article (see [Structure of the article](#structurearticle)).
 
-- When you are happy with the outlining, invest the rest of the time in polishing first your title, then your header and then the interpretation of the numbers part. 
-
+-   When you are happy with the outlining, invest the rest of the time in polishing first your title, then your header and then the interpretation of the numbers part.
 
 ### Structure of the article {#structurearticle}
 
-Your article should contain: 
+Your article should contain:
 
-- Title
+-   Title
 
-- Header
+-   Header
 
-- Numbers & facts and interpretation, i.e. what the numbers mean
+-   Numbers & facts and interpretation, i.e. what the numbers mean
 
-- Causes of the issue/problem
+-   Causes of the issue/problem
 
-- Consequences of the issue/problem
+-   Consequences of the issue/problem
 
-- A fake "expert-opinion" that you invent
+-   A fake "expert-opinion" that you invent
 
-- Conclusion
-
+-   Conclusion
 
 ## Roles {#roles}
 
 ### Denier
+
 You strive to make the the topic look small and insignificant. Maybe you have specific, even evil reasons for this (do you have any interests in keeping the status quo and not addressing the issue?), or maybe you just think that other issues are much more important than this one.
 
 ### Alarmist
-You want to make the issue as large and problematic as possible. Maybe this is out of genuine care for people, or for other vested interests. Your goal is to make people jump up and rush to action about this topic. 
+
+You want to make the issue as large and problematic as possible. Maybe this is out of genuine care for people, or for other vested interests. Your goal is to make people jump up and rush to action about this topic.
 
 ### Clickbait monger
-Your goal is to get as many clicks (and therefor as much money from ads) as possible. You really don't care about the content or the consequence of your article for people's lives. If people are stupid enough to click on your article and read it, it's their own fault. 
+
+Your goal is to get as many clicks (and therefor as much money from ads) as possible. You really don't care about the content or the consequence of your article for people's lives. If people are stupid enough to click on your article and read it, it's their own fault.
 
 ### Conspiracy Theorist
-You distrust any kind of official mainstream narrative and you want to convince your audience that this distrust is justified. You are the smart one here, connecting all the dots, and you dare to look at what the others don't see. But once they read your article, they will be able to see the truth for themselves. 
 
-
+You distrust any kind of official mainstream narrative and you want to convince your audience that this distrust is justified. You are the smart one here, connecting all the dots, and you dare to look at what the others don't see. But once they read your article, they will be able to see the truth for themselves.
 
 ## Information - Issue {#info}
 
-Anemia is a condition where someone has fewer red blood cells or lower hemoglobin levels in their blood cells than normal. This reduces the blood's ability to provide oxygen throughout the body. 
+Anemia is a condition where someone has fewer red blood cells or lower hemoglobin levels in their blood cells than normal. This reduces the blood's ability to provide oxygen throughout the body.
 
-Its symptoms are often subtle: in most cases, it’s fatigue and weakness, but it can also involve shortness of breath and headaches. These symptoms are common for various reasons, making them harder to attribute to a specific condition like anemia in adults as well as children. Even in children, when anemia can lead to delays in cognitive and physical development and poor concentration, the signs are not obvious.
+Its symptoms are often subtle: in most cases, it's fatigue and weakness, but it can also involve shortness of breath and headaches. These symptoms are common for various reasons, making them harder to attribute to a specific condition like anemia in adults as well as children. Even in children, when anemia can lead to delays in cognitive and physical development and poor concentration, the signs are not obvious.
 
 Severe anemia can lead to much more drastic outcomes, though. Anemia during pregnancy can significantly increase the risks of low birthweight babies and, therefore, the risk of infant mortality. It also increases the risk of maternal mortality, especially if there is a lot of blood loss during childbirth. And anemia in pregnant women is extremely common, especially in lower-income countries.
 
+![Anemia risk groups](anemia-risk-groups.png) The reasons for anemia are varied:
 
-![Anemia risk groups](anemia-risk-groups.png)
-The reasons for anemia are varied: 
+-   low iron intake from food / malnutrition
 
-- low iron intake from food / malnutrition
+-   infectious diseases like HIV, Malaria
 
-- infectious diseases like HIV, Malaria
+-   infections by parasites such as Hookworms
 
-- infections by parasites such as Hookworms
+-   menstruation health issues, e.g. Endometriosis
 
-- menstruation health issues, e.g. Endometriosis
+-   pregnancy
 
-- pregnancy 
+-   maternal blood-loss at birth
 
-- maternal blood-loss at birth
-
-- genetic causes such as sickle cell disease
-
+-   genetic causes such as sickle cell disease
 
 [This information is adapted from an excerpt of @Ritchie2024. You could go there for more information, but really the goal is to make your own article, not copy hers.]
 
