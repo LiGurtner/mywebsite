@@ -14,6 +14,34 @@
     "text": "Rethinkig statistics\nTogether with two PhD-students from the Commonpaths-Project, we are in the process of going through Richard McElreath’s “Rethinking statistics” and publish brms-tidyverse-ish solutions to his exercises here"
   },
   {
+    "objectID": "classes/fake-news-game/fake-news-game.html",
+    "href": "classes/fake-news-game/fake-news-game.html",
+    "title": "Fake-news Game",
+    "section": "",
+    "text": "In this game, students will produce a fake-news article, coming from a specific point of few and to a specific topic.\nwhy? Because by producing fake-news themselves, students “inoculate” themselves against mis- and disinformation (Lu et al. 2023).\nhow? In groups of 2-3, students will all start with the same information (see Information - Issue), but will have different roles or characters (see Roles). They use this role to craft one online-article per group, using the information provided, but with the intentions/motivations of their specific role.\nThe game is a variation of the fake news game presented in Roozenbeek and Van Der Linden (2019)."
+  },
+  {
+    "objectID": "classes/fake-news-game/fake-news-game.html#instuction",
+    "href": "classes/fake-news-game/fake-news-game.html#instuction",
+    "title": "Fake-news Game",
+    "section": "\n1 Instuction",
+    "text": "1 Instuction\n\nRead the description of your assigned role and the information about the issue.\nAgree in the group about your character: formulate their interest for the issue, their motivations, why they think how they think.\nStart outlining the article (see Structure of the article).\nWhen you are happy with the outlining, invest the rest of the time in polishing first your title, then your header and then the interpretation of the numbers part.\n\n\n1.1 Structure of the article\nYour article should contain:\n\nTitle\nHeader\nNumbers & facts and interpretation, i.e. what the numbers mean\nCauses of the issue/problem\nConsequences of the issue/problem\nA fake “expert-opinion” that you invent\nConclusion"
+  },
+  {
+    "objectID": "classes/fake-news-game/fake-news-game.html#roles",
+    "href": "classes/fake-news-game/fake-news-game.html#roles",
+    "title": "Fake-news Game",
+    "section": "\n2 Roles",
+    "text": "2 Roles\n\n2.1 Denier\nYou strive to make the the topic look small and insignificant. Maybe you have specific, even evil reasons for this (do you have any interests in keeping the status quo and not addressing the issue?), or maybe you just think that other issues are much more important than this one.\n\n2.2 Alarmist\nYou want to make the issue as large and problematic as possible. Maybe this is out of genuine care for people, or for other vested interests. Your goal is to make people jump up and rush to action about this topic.\n\n2.3 Clickbait monger\nYour goal is to get as many clicks (and therefor as much money from ads) as possible. You really don’t care about the content or the consequence of your article for people’s lives. If people are stupid enough to click on your article and read it, it’s their own fault.\n\n2.4 Conspiracy Theorist\nYou distrust any kind of official mainstream narrative and you want to convince your audience that this distrust is justified. You are the smart one here, connecting all the dots, and you dare to look at what the others don’t see. But once they read your article, they will be able to see the truth for themselves."
+  },
+  {
+    "objectID": "classes/fake-news-game/fake-news-game.html#info",
+    "href": "classes/fake-news-game/fake-news-game.html#info",
+    "title": "Fake-news Game",
+    "section": "\n3 Information - Issue",
+    "text": "3 Information - Issue\nAnemia is a condition where someone has fewer red blood cells or lower hemoglobin levels in their blood cells than normal. This reduces the blood’s ability to provide oxygen throughout the body.\nIts symptoms are often subtle: in most cases, it’s fatigue and weakness, but it can also involve shortness of breath and headaches. These symptoms are common for various reasons, making them harder to attribute to a specific condition like anemia in adults as well as children. Even in children, when anemia can lead to delays in cognitive and physical development and poor concentration, the signs are not obvious.\nSevere anemia can lead to much more drastic outcomes, though. Anemia during pregnancy can significantly increase the risks of low birthweight babies and, therefore, the risk of infant mortality. It also increases the risk of maternal mortality, especially if there is a lot of blood loss during childbirth. And anemia in pregnant women is extremely common, especially in lower-income countries.\n The reasons for anemia are varied:\n\nlow iron intake from food / malnutrition\ninfectious diseases like HIV, Malaria\ninfections by parasites such as Hookworms\nmenstruation health issues, e.g. Endometriosis\npregnancy\nmaternal blood-loss at birth\ngenetic causes such as sickle cell disease\n\n(This information is adapted from an excerpt of Ritchie 2024. You could go there for more information, but really the goal is to make your own article, not copy hers.)"
+  },
+  {
     "objectID": "classes/Data_literacy/index_data_lit.html",
     "href": "classes/Data_literacy/index_data_lit.html",
     "title": "Daten verstehen und kommunizieren",
@@ -217,6 +245,13 @@
     "text": "Teaching\n\n\n\n\n\n  \n     \n  \n\n\n University of Bern \n    „Human cognitive makeup: getting to know our software for global problemsolving“, course in the Master in Sustainability Transformations, CDE, 2024 \n  \n\n  \n    „Evidence-based career development“, course in the Master in Sustainability Transformations, CDE, 2024 \n  \n\n  \n    “How can I argue for a sustainable future?”, workshop, ESD network, 2023  \n  \n\n  \n    “Understanding and communicating data”, self-developed Proseminar, 2023 \n  \n\n  \n    “Psychology and sustainability: What do we need to act?”, self-developed proseminar, funded by the ESD network of the University of Bern, Syllabus at: https://osf.io/78ct6/, 2022, 2023 \n  \n\n  \n    „Exercise Course Statistics II and III”, weekly practice sessions accompanying the mandatory statistical classes for Psychology, Bachelor and Master level \n  \n\n  \n    “Scientific Work” (Bachelor) Tutorial \n  \n\n  \n    Supervision of Bachelor- and Master students \n  \n\n Swiss Distance University \n    Supervision of Bachelor students in the module for perception \n  \n\n  \n    Preparation and evaluation of weekly exams, preparation and support for lectures"
   },
   {
+    "objectID": "cv/index_cv.html#grants",
+    "href": "cv/index_cv.html#grants",
+    "title": "curriculum vitae",
+    "section": "Grants",
+    "text": "Grants\n\n\n\n\n\n  \n     \n  \n\n\n Doctoral students workshop \n    Fund for organizing a workshop on Bayesian multi-level models with Dr. Paul Bürkner. Awarded in 2017, sum: 2400 CHF \n  \n\n Fund for participation compensation \n    Funding for PhD candidates to recompensate participants of experiments. Awarded in 2022, sum: 2080 CHF \n  \n\n COMET Career Programme \n    Funding for female researchers in successfully pursuing their academic careers: individually customized programme to enhance skills, know-how and motivation. Awarded in 2024, sum: 3500 CHF"
+  },
+  {
     "objectID": "cv/index_cv.html#personal-competences",
     "href": "cv/index_cv.html#personal-competences",
     "title": "curriculum vitae",
@@ -271,61 +306,5 @@
     "title": "Curriculum vitae",
     "section": "dfsjg",
     "text": "dfsjg\nlkjhadfgöjha"
-  },
-  {
-    "objectID": "classes/fake-news-game/fake-news-game.html",
-    "href": "classes/fake-news-game/fake-news-game.html",
-    "title": "Fake-news Game",
-    "section": "",
-    "text": "In this game, students will produce a fake-news article, coming from a specific point of few and to a specific topic.\nwhy? Because by producing fake-news themselves, students “inoculate” themselves against mis- and disinformation (Lu et al. 2023).\nhow? In groups of 2-3, students will all start with the same information (see Information - Issue), but will have different roles or characters (see Roles). They use this role to craft one online-article per group, using the information provided, but with the intentions/motivations of their specific role.\nThe game is a variation of the fake news game presented in Roozenbeek and Van Der Linden (2019)."
-  },
-  {
-    "objectID": "classes/fake-news-game/fake-news-game.html#instuction",
-    "href": "classes/fake-news-game/fake-news-game.html#instuction",
-    "title": "Fake-news Game",
-    "section": "\n1 Instuction",
-    "text": "1 Instuction\n\nRead the description of your assigned role and the information about the issue.\nAgree in the group about your character: formulate their interest for the issue, their motivations, why they think how they think.\nStart outlining the article (see Structure of the article).\nWhen you are happy with the outlining, invest the rest of the time in polishing first your title, then your header and then the interpretation of the numbers part.\n\n\n1.1 Structure of the article\nYour article should contain:\n\nTitle\nHeader\nNumbers & facts and interpretation, i.e. what the numbers mean\nCauses of the issue/problem\nConsequences of the issue/problem\nA fake “expert-opinion” that you invent\nConclusion"
-  },
-  {
-    "objectID": "classes/fake-news-game/fake-news-game.html#roles",
-    "href": "classes/fake-news-game/fake-news-game.html#roles",
-    "title": "Fake-news Game",
-    "section": "\n2 Roles",
-    "text": "2 Roles\n\n2.1 Denier\nYou strive to make the the topic look small and insignificant. Maybe you have specific, even evil reasons for this (do you have any interests in keeping the status quo and not addressing the issue?), or maybe you just think that other issues are much more important than this one.\n\n2.2 Alarmist\nYou want to make the issue as large and problematic as possible. Maybe this is out of genuine care for people, or for other vested interests. Your goal is to make people jump up and rush to action about this topic.\n\n2.3 Clickbait monger\nYour goal is to get as many clicks (and therefor as much money from ads) as possible. You really don’t care about the content or the consequence of your article for people’s lives. If people are stupid enough to click on your article and read it, it’s their own fault.\n\n2.4 Conspiracy Theorist\nYou distrust any kind of official mainstream narrative and you want to convince your audience that this distrust is justified. You are the smart one here, connecting all the dots, and you dare to look at what the others don’t see. But once they read your article, they will be able to see the truth for themselves."
-  },
-  {
-    "objectID": "classes/fake-news-game/fake-news-game.html#info",
-    "href": "classes/fake-news-game/fake-news-game.html#info",
-    "title": "Fake-news Game",
-    "section": "\n3 Information - Issue",
-    "text": "3 Information - Issue\nAnemia is a condition where someone has fewer red blood cells or lower hemoglobin levels in their blood cells than normal. This reduces the blood’s ability to provide oxygen throughout the body.\nIts symptoms are often subtle: in most cases, it’s fatigue and weakness, but it can also involve shortness of breath and headaches. These symptoms are common for various reasons, making them harder to attribute to a specific condition like anemia in adults as well as children. Even in children, when anemia can lead to delays in cognitive and physical development and poor concentration, the signs are not obvious.\nSevere anemia can lead to much more drastic outcomes, though. Anemia during pregnancy can significantly increase the risks of low birthweight babies and, therefore, the risk of infant mortality. It also increases the risk of maternal mortality, especially if there is a lot of blood loss during childbirth. And anemia in pregnant women is extremely common, especially in lower-income countries.\n The reasons for anemia are varied:\n\nlow iron intake from food / malnutrition\ninfectious diseases like HIV, Malaria\ninfections by parasites such as Hookworms\nmenstruation health issues, e.g. Endometriosis\npregnancy\nmaternal blood-loss at birth\ngenetic causes such as sickle cell disease\n\n(This information is adapted from an excerpt of Ritchie 2024. You could go there for more information, but really the goal is to make your own article, not copy hers.)"
-  },
-  {
-    "objectID": "classes/fake-news-game/Textprezi.html#instuction",
-    "href": "classes/fake-news-game/Textprezi.html#instuction",
-    "title": "Habits",
-    "section": "Instuction",
-    "text": "Instuction\n\nRead the description of your assigned role and the information about the issue.\nAgree in the group about your character: formulate their interest for the issue, their motivations, why they think how they think.\nStart outlining the article (see Structure of the article).\nWhen you are happy with the outlining, invest the rest of the time in polishing first your title, then your header and then the interpretation of the numbers part.\n\nStructure of the article\nYour article should contain:\n\nTitle\nHeader\nNumbers & facts and interpretation, i.e. what the numbers mean\nCauses of the issue/problem\nConsequences of the issue/problem\nA fake “expert-opinion” that you invent\nConclusion"
-  },
-  {
-    "objectID": "classes/fake-news-game/Textprezi.html#roles",
-    "href": "classes/fake-news-game/Textprezi.html#roles",
-    "title": "Habits",
-    "section": "Roles",
-    "text": "Roles\nDenier\nYou strive to make the the topic look small and insignificant. Maybe you have specific, even evil reasons for this (do you have any interests in keeping the status quo and not addressing the issue?), or maybe you just think that other issues are much more important than this one.\nAlarmist\nYou want to make the issue as large and problematic as possible. Maybe this is out of genuine care for people, or for other vested interests. Your goal is to make people jump up and rush to action about this topic.\nClickbait monger\nYour goal is to get as many clicks (and therefor as much money from ads) as possible. You really don’t care about the content or the consequence of your article for people’s lives. If people are stupid enough to click on your article and read it, it’s their own fault.\nConspiracy Theorist\nYou distrust any kind of official mainstream narrative and you want to convince your audience that this distrust is justified. You are the smart one here, connecting all the dots, and you dare to look at what the others don’t see. But once they read your article, they will be able to see the truth for themselves."
-  },
-  {
-    "objectID": "classes/fake-news-game/Textprezi.html#info",
-    "href": "classes/fake-news-game/Textprezi.html#info",
-    "title": "Habits",
-    "section": "Information - Issue",
-    "text": "Information - Issue\nAnemia is a condition where someone has fewer red blood cells or lower hemoglobin levels in their blood cells than normal. This reduces the blood’s ability to provide oxygen throughout the body.\nIts symptoms are often subtle: in most cases, it’s fatigue and weakness, but it can also involve shortness of breath and headaches. These symptoms are common for various reasons, making them harder to attribute to a specific condition like anemia in adults as well as children. Even in children, when anemia can lead to delays in cognitive and physical development and poor concentration, the signs are not obvious.\nSevere anemia can lead to much more drastic outcomes, though. Anemia during pregnancy can significantly increase the risks of low birthweight babies and, therefore, the risk of infant mortality. It also increases the risk of maternal mortality, especially if there is a lot of blood loss during childbirth. And anemia in pregnant women is extremely common, especially in lower-income countries.\n The reasons for anemia are varied:\n\nlow iron intake from food / malnutrition\ninfectious diseases like HIV, Malaria\ninfections by parasites such as Hookworms\nmenstruation health issues, e.g. Endometriosis\npregnancy\nmaternal blood-loss at birth\ngenetic causes such as sickle cell disease\n\n[This information is adapted from an excerpt of @Ritchie2024. You could go there for more information, but really the goal is to make your own article, not copy hers.]"
-  },
-  {
-    "objectID": "classes/fake-news-game/Textprezi.html#references",
-    "href": "classes/fake-news-game/Textprezi.html#references",
-    "title": "Habits",
-    "section": "References",
-    "text": "References"
   }
 ]

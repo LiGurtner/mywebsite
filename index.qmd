@@ -16,17 +16,14 @@ about:
 workflow: 
 - change in CV: 
   - add new line to .csv files in cv/[].csv
-  - render website
+  - render website in RStudio
   - add / commit / push
   
   
 - change in publications: and others
   - add new item in publications/index_pub.qmd
   - render website
-  - add / commi / push
-  
-  
-  
+  - add / commit / push
 
 --->
 

@@ -70,6 +70,19 @@ kableExtra::kable(teach, kable_format = "html", align = c("r", "l")) |>
   kableExtra::row_spec(1, hline_after = T)
 ```
 
+
+## Grants
+
+```{r}
+
+grants <- read.csv("Grants.csv") 
+names(grants) <- NULL 
+kableExtra::kable(grants, kable_format = "html") |> 
+  kableExtra::column_spec(1, 
+                          width_min = "4cm") 
+```
+
+
 ## Personal competences
 
 ```{r}
