@@ -26,7 +26,7 @@ knitr::opts_chunk$set(fig.pos = 'H',
 ```
 
 
-## Education
+## Education - degrees
 ```{r}
 edu <- read.csv("edu.csv") 
 names(edu) <- NULL 
@@ -37,6 +37,17 @@ kableExtra::kable(edu, kable_format = "html", align = c("r", "l")) |>
                        padding: 10px")
 ```
 
+## Education - further courses
+
+```{r}
+edu_further <- read.csv("Further_edu.csv") 
+names(edu_further) <- NULL 
+kableExtra::kable(edu_further, kable_format = "html", align = c("r", "l")) |> 
+  kableExtra::column_spec(1, 
+                          width_min = "4cm") |> 
+  kableExtra::row_spec(row = 1:23, extra_css = "line-height: 1.2;
+                       padding: 10px")
+```
 ## Employment
 
 ```{r}
@@ -82,6 +93,7 @@ kableExtra::kable(grants, kable_format = "html") |>
                           width_min = "4cm") 
 ```
 
+## 
 
 ## Personal competences
 
@@ -96,6 +108,7 @@ kableExtra::kable(persComp, kable_format = "html") |>
 
 ## Outreach activities
 
+- Participation in living library discussion on "Psychology and Transformation: what can they learn from each other?" [Living Library](https://scich.org/en/local-projects/living-library/) (18.09.2024)
 - Member of researcher panel in the [„stories for future“ project](https://storiesforfuture.ch/) (since 2024)
 - Presentation in the Eco Summer Camp (2024)
 - Leader & Producer of Podcast [„Zukunftswerkstatt - Ideas and Pathways to tomorrow“](https://www.podcast.de/podcast/3277597/zukunftswerkstatt-ideen-und-wege-ins-morgen) (German, since 2023)
