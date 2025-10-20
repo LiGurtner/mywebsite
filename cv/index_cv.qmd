@@ -75,7 +75,7 @@ urls <- c("https://www.bne.unibe.ch/unibe/portal/microsites/BNE/content/e497827/
 kableExtra::kable(teach, kable_format = "html", align = c("r", "l")) |> 
   kableExtra::column_spec(1, 
                           width_min = "4cm") |> 
-  kableExtra::row_spec(row = 1:10, 
+  kableExtra::row_spec(row = 1:13, 
                        extra_css = "line-height: 1.2;
                        padding: 10px") |> 
   kableExtra::row_spec(1, hline_after = T)
@@ -88,9 +88,13 @@ kableExtra::kable(teach, kable_format = "html", align = c("r", "l")) |>
 
 grants <- read.csv("Grants.csv") 
 names(grants) <- NULL 
-kableExtra::kable(grants, kable_format = "html") |> 
+kableExtra::kable(grants, kable_format = "html",  align = c("r", "l")) |> 
   kableExtra::column_spec(1, 
-                          width_min = "4cm") 
+                          width_min = "4cm") |> 
+  kableExtra::row_spec(row = 1:3, 
+                       extra_css = "line-height: 1.2;
+                       padding: 10px") |> 
+  kableExtra::row_spec(1, hline_after = T)
 ```
 
 ## 
