@@ -10,7 +10,7 @@ editor_options:
 
 ## Peer-reviewed papers
 
-Pedrazzini, Sabina, **Gurtner, Lilla**, Aggrey, Vincent, & Moser, Stephanie (2025). Review of Exploring individual and organizational factors influencing cooperation in commons: a scoping review. Frontiers in Psychology, 16. [[link]](https://doi.org/10.3389/fpsyg.2025.1465057)
+Pedrazzini, Sabina, **Gurtner, Lilla**, Aggrey, Vincent, & Moser, Stephanie (2025). Exploring individual and organizational factors influencing cooperation in commons: a scoping review. Frontiers in Psychology, 16. [[link]](https://doi.org/10.3389/fpsyg.2025.1465057)
 
 
 Ertl, M., & **Gurtner, L. M.** (2025). Human sciences can increase technology acceptance in rehabilitation science: A call for action. Frontiers in Rehabilitation Sciences, 5, 1356445. [[link]](https://doi.org/10.3389/fresc.2024.1356445)
@@ -36,6 +36,10 @@ Mast, F. W., & **Gurtner, L.** M. (2023). Mental Rotation and Visual Imagery. In
 
 Martarelli, C. S., **Gurtner, L.** M., & Mast, F. W. (2015). School-age children show a bias toward fantasy classifications after playing a platform game. Psychology of Popular Media Culture, 4(4), 351–359. [[link]](https://doi.org/10.1037/ppm0000051)
 
+
+## Pre-Prints
+
+**Gurtner, Lilla M.** and Gammelgaard, Johanna and Liu, Tianzhu and Gerber, Julien-Francois and Moser, Stephanie, How can commons contribute to transformations towards a post-growth society? A literature review and proposed avenues for change. [Available at SSRN](https://ssrn.com/abstract=5495505) 
 
 
 ##  Conference contributions
