@@ -91,10 +91,11 @@ kableExtra::kable(teach,
 
 grants <- read.csv("Grants.csv") 
 names(grants) <- NULL 
+n_row <- nrow(grants)
 kableExtra::kable(grants, kable_format = "html",  align = c("r", "l")) |> 
   kableExtra::column_spec(1, 
                           width_min = "4cm") |> 
-  kableExtra::row_spec(row = 1:5, 
+  kableExtra::row_spec(row = 1:n_row, 
                        extra_css = "line-height: 1.2;
                        padding: 10px") |> 
   kableExtra::row_spec(1, hline_after = T)
