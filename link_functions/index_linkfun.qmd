@@ -1,0 +1,698 @@
+---
+title: Fun with link-functions
+engine: knitr 
+toc: true
+toc-location: left
+toc-title: Fun with link-functions
+editor_options: 
+  chunk_output_type: console
+---
+<!--- when done, uncomment the lines 28/29 in the _quarto.yml document--->
+
+This site serves future me and anyone interested as a help to understand how to deal with link-functions in linear models. One of the difficulties is that the interpretation of models' parameters changes with the link function and the type of predictors used (see [this paper](https://osf.io/preprints/psyarxiv/g4s2a_v2)). 
+
+**If you detect an error, please let me know: lilla.gurtner2@unibe.ch**
+
+In general, there are different packages that provide helper functions to get at the estimates of a model at the link level and at the expected and predicted response level (see [this helpfull site](https://www.andrewheiss.com/blog/2022/09/26/guide-visualizing-types-posteriors/#tldr-diagrams-and-cheat-sheets) for the distinctions). I will compare the results of three different packages: `brms`, `tidybayes`, `marginaleffects`. 
+
+`brms` has some functions like `posterior_linpred()` and `posterior_epred()` that give access to the draws of the posterior estimates. They are the basis of the following packages, but the results are a bit cumbersome to work with.
+
+`tidybayes` makes access to these draws simpler by providing them in a tidy format as a tibble rather than a matrix. Based on this direct access to the posterior, summary statistics can be computed / plotted.
+
+`marginaleffects` uses the `insight` package to provide marginal means and constrasts for a given model. It provides the `predictions()` functions to get predictions for each observations, and the `comparisons()` function to take easily the difference between e.g. groups. Both can have the prefix `avg_`before them to take the average of the above. 
+ 
+In the first section, I collect the different functions from the different packages and compare them to each other, to be best of my understanding. In the second section, I go through two examples. 
+
+# Setup
+
+An example generalized linear regression model. 
+
+```{r setup}
+#| message: false
+#| warning: false
+#| echo: false
+
+library(tidyverse)
+library(brms)
+library(marginaleffects)
+library(tidybayes)
+library(ggdist)
+
+set.seed(123)
+dat <- epilepsy 
+
+# a simple model fitting number of epileptic seizure by the treatment (0 or 1)
+mod <- brm(count ~ 1 + Trt, 
+                  family = poisson(), 
+                  data = dat, 
+                  file = "poisson_model") 
+
+# the linkfunction of the poisson regression is a log()
+```
+
+
+
+# Collection of functions
+
+## Estimates on the link-level
+The following functions can be used to get to the posterior sampels on the link-level, that is, on the level of the linear regression term. This is, what is also reported in `summary(model)`. 
+
+### using `brms` package
+
+```{r link level funs brms}
+
+a <- brms::posterior_linpred(mod) 
+glimpse(a)
+
+```
+Produces a matrix with n_observations x n_samples, contains 4000 predictions on the level of the link function for each observation. 
+
+### using `tidybayes` functions
+
+```{r link tidybayes}
+
+a <- tidybayes::tidy_draws(mod) 
+# tibble with length = n_chains*n_draws (postwarump) 
+# contains the samples from the posterior + other numbers for model diagnostics
+
+
+a <- tidybayes::spread_draws(mod, b_Trt1) # tibble:length = n_chains * n_draws (post warm-up)
+# the mean(a$b_Trt1) is the same as the beta coefficient in  summary(mod)
+# thus, this is only the beta-coefficients' draws, not added to intercept
+
+
+a <- tidybayes::add_linpred_draws(object = mod, 
+                                  newdata = dat)
+# tibble with prediction for each observation *n_chain*n_sample => 
+# predicted posterior distribution on the link-level for each observation
+# gives the same as model |> marginaleffects::predictions () |> get_draws() below
+# if this goes through the inverse link function, we get at the E(x)
+
+
+
+```
+
+`mean(exp(a$.linpred))` = `r mean(exp(a$.linpred))` is the average predicted number of seizures, now on the response level because the .linpred is back-converted through the inverse link function. 
+
+
+### using `marginaleffects` package
+
+
+```{r link marginaleffects predictions}
+
+a <- marginaleffects::predictions(mod, type = "link")
+# tibble with the estimate column giving the link-level estimates for the different groups. no variance, just intercept + b*x
+# size: n_observations in model (i.e. all nas are out if you did not impute)
+
+a <- marginaleffects::predictions(mod, type = "link", newdata = dat) 
+# tibble with a prediction for every observation, on the link level, no variance, just the intercept + b*x
+# size: n_observations, with rows containing NA that were not part of the model
+
+b <- get_draws(a) # tibble with n_chain*n_draw*n_observations, 
+# samples from the posterior distribution of the model
+# depending on whether you specified newdata before, you will get predictions for all data, or all data that went into the model (without imputation, i.e without taking into account lines with missing data)
+# this can be used to summarize the posterior distribution
+
+mean(exp(b$draw))
+
+```
+
+Here, in my view, the first problem arises, because the difference between the two estimates of the two conditions, `unique(a$estimate)` =  `r unique(a$estimate)`, is not the same as the beta coefficient of the model itself: 
+
+```{r link marginaleffects problem}
+unique(a$estimate)[2] - unique(a$estimate)[1]
+
+fixef(mod)[2]
+```
+It is close, but given that the seed is set, I wonder why it is not exactly the same. 
+
+The `get_draws(a)` however makes a bit more sense, its mean is exactly the same as the mean of `brms::posterior_linpred(mod)`. The `mean(exp(b$draw))` gives again the average predicted number of seizures, now on the response level because the draw on the link-level is back-converted through the inverse link function.
+
+Then, to do summaries, there is the `avg_predictions()` and `avg_comparisons()` function. 
+```{r link level funs marignaleffects}
+## these two give the same. I am not sure why
+# averaged over the predictions() from above: 
+a <- marginaleffects::avg_predictions(mod, type = "link", variables = "Trt") # this gives the predictions for the two treatment conditions
+
+a <- marginaleffects::avg_comparisons(mod, type = "link", variables = "Trt") # this gives directly the difference between the treatment conditions
+
+```
+
+
+To test what they write on their webpage: "
+[type = "link": Compute posterior draws of the linear predictor using the brms::posterior_linpred function.](https://marginaleffects.com/bonus/brms.html)", let's compare the two directly: 
+
+```{r link marginaleffects vs brms}
+a <- marginaleffects::predictions(mod, type = "link")
+mean(a$estimate)
+
+mean(brms::posterior_linpred(mod))
+```
+
+They are not exactly the same, but almost. Could this be the same reason as above?
+
+
+## Estimates on the expected response level
+
+In this part, we get estimates that are back-transformed through the inverse link function. Given that in most brms models, per default, the linear part of the model predicts the central tendency or expected value of the outcome distribution, the estimates that are backtransformed give only the expected values. Thus, the `sigma` term from brms, which could be the measurement error, is not taken into consideration. Therefore, credible intervals on this level are much narrower than in the next section. 
+
+### using `brms`
+Again, `brms` returns matrices, that are not super handy to work with, but these are the basis for the following functions
+```{r resp brms}
+
+a <- brms::posterior_linpred(mod, transform = TRUE)
+# expected response, without sigma
+# # matrix with n_samples x n_observations
+b <- brms::posterior_epred(mod)
+
+unique(a == b)
+
+```
+
+### using `tidybayes()`
+```{r resp tidybayes}
+
+a <- tidybayes::add_linpred_draws(object = mod, newdata = dat, transform = TRUE) 
+# tibbles with n_observation_n_chains*n_draws lines
+b <-tidybayes::add_epred_draws(object = mod, newdata = dat)
+c <-tidybayes::epred_draws(object = mod, newdata = dat)
+
+unique(a$.linpred == b$.epred)
+unique(a$.linpred == c$.epred)
+unique(b$.epred == c$.epred)
+
+```
+In this case, the three lines give the same result. But see [here](https://www.andrewheiss.com/blog/2022/09/26/guide-visualizing-types-posteriors/#when-posterior_epred-isnt-just-the-back-transformed-linear-predictor), and [here](https://github.com/mjskay/uncertainty-examples/blob/master/linpred_epred.md) for why it will not always be the case (e.g. in lognormal models!)
+
+
+### using `marginaleffects`
+[type = "response": Compute posterior draws of the expected value using the brms::posterior_epred function.]((https://marginaleffects.com/bonus/brms.html))
+
+
+```{r resp marginal effects}
+# get the estimates on a unit level, conditional on all other predictors being average
+a <- marginaleffects::predictions(mod, type = "response") 
+# tibbel with prediction for each row of the dataset that was used fitting the model (is not the same as observation in the dataset if you did not impute)
+a <- marginaleffects::predictions(mod, type = "response", newdata = dat) # prediction for each row of the dataset
+# tibble with n_observatons (including those that had NA and were not part of the model if you did not impute)
+b <- get_draws(a) # tibble with n_chain*n_sample*n_observations
+```
+
+
+```{r resp marginaleffects avg}
+
+a <- marginaleffects::avg_predictions(mod, type = "response", variables = "Trt") 
+# tibbel with the mean of the predictions for each row of the dataset that was used fitting the model (is not the same as observation in the dataset if you did not impute)
+a <- marginaleffects::avg_predictions(mod, type = "response", newdata = dat) # prediction for each row of the dataset
+# tibble with one line, mean of n_observatons (including those that had NA and were not part of the model if you did not impute)
+```
+
+```{r resp marginaleffects comparison}
+#compare the estimates by taking the difference
+
+a <- marginaleffects::comparisons(mod, variables = "Trt", type = "response")
+a <- marginaleffects::avg_comparisons(mod, variables = "Trt", type = "response")
+```
+
+
+
+
+## Estimates on the predicted response level
+Here, we produce predictions for either our existing data frame, or new data. The predictions are now on the true outcome level, i.e. not expected number of seizures, but actual predictions of actual integers. 
+
+### using `brms`
+
+```{r pred brms}
+a <- brms::posterior_predict(mod)
+# prediction of individual responses, with sigma
+# matrix with n_samples x n_observations
+```
+
+### using `tidybayes`
+
+```{r pred tidybayes}
+
+a <- tidybayes::add_predicted_draws(object = mod, newdata = dat)
+b <- tidybayes::predicted_draws(object = mod, newdata = dat)
+
+unique(a$.prediction == b$.prediction)
+
+```
+These are not always the same since there is now "sampling error" included in the predictions. Also, if you rerun each line, there will be different .predictions made.
+
+
+
+### using `marinaleffects`
+```{r pred marigaleffects}
+
+a <- marginaleffects::predictions(mod, type = "prediction")
+a <- marginaleffects::predictions(mod, type = "prediction", newdata = dat)
+#type = "prediction": Compute posterior draws of the posterior predictive distribution using the brms::posterior_predict function.
+b <- get_draws(a) # tibble with n_chain*n_sample*n_observations
+
+a <- marginaleffects::avg_predictions(mod, type = "prediction")
+# averaged over predictions() from above
+
+```
+
+
+
+
+# Direct comparison of outputs
+In this part, I directly compare the output of `tidybayes`and `marginaleffects`, with by-hand computations of the estimates, to better understand what does what. I do it first continuing with the Poisson regression from above.
+
+## Poisson Regression
+
+Poisson regressions use the `log()` as a link function, to ensure that the linear part of the model does not end up giving a lambda that is negative (which `poisson()`-family cannot handle). So, the model goes like this: 
+
+$outcome \sim Poisson(lambda)$
+
+$log(lambda) = a + bx$
+
+For a and b, we need to specify priors in Baeysian analysis
+
+$a \sim Normal(0,2)$
+
+$b \sim Normsl(0,1)$
+
+We can use the `marginaleffects`-Package for [prior predictive checks](https://arelbundock.com/posts/marginaleffects_priors/), or we can also use `pp_check()`. This is not of interest here. 
+
+### Link-level comparison
+
+First, I compare the output on the link-level. This is easiest because the posterior draws should directly translate to the results of `summary(mod)`. 
+
+Let's look first at the increase of seizures between the two treatment groups with the different methods
+```{r link comparison increase}
+
+link_comparison <- tibble(origin = character(), 
+                          estimate = numeric(), 
+                          lowerCI = numeric(), 
+                          upperCI = numeric()) 
+
+## fixef baseline ----
+
+fixef_row <- tibble(origin = "fixef(mod)", # from fixef as baseline
+          estimate = fixef(mod)[2,1], 
+          lowerCI = fixef(mod)[2,3], 
+          upperCI = fixef(mod)[2,4]) 
+
+
+## tidybayes ----
+tidybayes_diffs <- tidybayes::add_linpred_draws(object = mod, 
+                                  newdata = dat, 
+                                  transform = F) |> # set T/F for response / link level
+  group_by(Trt) |> 
+  summarise(mean_linpred = mean(.linpred),
+            lower_CI = quantile(.linpred, probs = 0.025), 
+            upper_CI = quantile(.linpred, probs = 0.975)) |> # group expected values
+  summarise(across(2:4, ~ .[2] - .[1])) # group difference
+
+tidybayes_row <- tibble(origin = "tidybayes1", # from fixef as baseline
+          estimate = tidybayes_diffs$mean_linpred, 
+          lowerCI = tidybayes_diffs$lower_CI, 
+          upperCI = tidybayes_diffs$upper_CI) 
+
+# another way to verify what I do is correct
+a <- tidybayes::add_linpred_draws(object = mod, 
+                                  newdata = dat, 
+                                  transform = F) |> 
+  filter(Trt == 1) |> 
+  pull(.linpred) |> 
+  mean_qi(.linpred, .width = c(0.95))
+
+  
+b <- tidybayes::add_linpred_draws(object = mod, 
+                                  newdata = dat, 
+                                  transform = F) |> 
+  filter(Trt == 0) |> 
+  pull(.linpred) |> 
+  mean_qi(.linpred, .width = c(0.95))
+
+tidybayes_diffs2 <- tibble(mean_linpred = a$y - b$y, 
+                     lower_CI = a$ymin - b$ymin, 
+                     upper_CI = a$ymax - b$ymax)
+
+tidybayes_row2 <- tibble(origin = "tidybayes2", # from fixef as baseline
+          estimate = tidybayes_diffs2$mean_linpred, 
+          lowerCI = tidybayes_diffs2$lower_CI, 
+          upperCI = tidybayes_diffs2$upper_CI) 
+
+### marginaleffects -----
+margEf_avgPred <- marginaleffects::avg_predictions(mod, 
+                                 type = "link", # set to "link" or "response
+                                 variables = "Trt") |> # grouped expected values
+  summarise(across(2:4, ~ .[2] - .[1])) # group differenece
+
+
+me_row_avg_pred <- tibble(origin = "marginaleffects::avg_predictions", # from fixef as baseline
+          estimate = margEf_avgPred$estimate, 
+          lowerCI = margEf_avgPred$conf.low, 
+          upperCI = margEf_avgPred$conf.high) 
+
+margEf_avgComp <- marginaleffects::avg_comparisons(mod, 
+                                 type = "link", # set to "link" or "response
+                                 variables = "Trt")
+
+
+me_row_avg_comp <- tibble(origin = "marginaleffects::avg_comparisons", # from fixef as baseline
+          estimate = margEf_avgComp$estimate, 
+          lowerCI = margEf_avgComp$conf.low, 
+          upperCI = margEf_avgComp$conf.high) 
+```
+Now, put together the table. 
+
+```{r linktable}
+link_comparison <- link_comparison |> 
+  add_row(fixef_row) |> 
+  add_row(tidybayes_row) |> 
+  add_row(tidybayes_row2) |> 
+  add_row(me_row_avg_pred) |> 
+  add_row(me_row_avg_comp)
+
+link_comparison
+  
+```
+
+Interpreting the table is difficult because it is on the link-level. But it is notable, that the numbers ar not always the same. I don't understand why that is. 
+
+### Expected response level comparison
+Now, let's look at the numbers on the response level
+```{r response comparison prep}
+
+response_comparison <- tibble(origin = character(), 
+                          estimate = numeric(), 
+                          lowerCI = numeric(), 
+                          upperCI = numeric()) 
+
+## fixef baseline ----
+# push link-level estimates through the inverse linkfunction
+fixef_row <- tibble(origin = "fixef(mod)", # from fixef as baseline
+          estimate = exp(fixef(mod)[2,1] + fixef(mod)[1,1]) - exp(fixef(mod)[1,1]), 
+          lowerCI = exp(fixef(mod)[2,3] + fixef(mod)[1,3]) - exp(fixef(mod)[1,3]), 
+          upperCI = exp(fixef(mod)[2,4] + fixef(mod)[1,4]) - exp(fixef(mod)[1,4])) 
+
+
+## tidybayes ----
+tidybayes_diffs <- tidybayes::add_linpred_draws(object = mod, 
+                                  newdata = dat, 
+                                  transform = T) |> # set T/F for response / link level
+  group_by(Trt) |> 
+  summarise(mean_linpred = mean(.linpred),
+            lower_CI = quantile(.linpred, probs = 0.025), 
+            upper_CI = quantile(.linpred, probs = 0.975)) |> # group expected values
+  summarise(across(2:4, ~ .[2] - .[1])) # group difference
+
+tidybayes_row <- tibble(origin = "tidybayes1", # from fixef as baseline
+          estimate = tidybayes_diffs$mean_linpred, 
+          lowerCI = tidybayes_diffs$lower_CI, 
+          upperCI = tidybayes_diffs$upper_CI) 
+
+# another way to verify what I do is correct
+a <- tidybayes::add_linpred_draws(object = mod, 
+                                  newdata = dat, 
+                                  transform = T) |> 
+  filter(Trt == 1) |> 
+  pull(.linpred) |> 
+  mean_qi(.linpred, .width = c(0.95))
+
+  
+b <- tidybayes::add_linpred_draws(object = mod, 
+                                  newdata = dat, 
+                                  transform = T) |> 
+  filter(Trt == 0) |> 
+  pull(.linpred) |> 
+  mean_qi(.linpred, .width = c(0.95))
+
+tidybayes_diffs2 <- tibble(mean_linpred = b$y - a$y, 
+                     lower_CI = b$ymin - a$ymin, 
+                     upper_CI = b$ymax - a$ymax)
+
+tidybayes_row2 <- tibble(origin = "tidybayes2", # from fixef as baseline
+          estimate = tidybayes_diffs2$mean_linpred, 
+          lowerCI = tidybayes_diffs2$lower_CI, 
+          upperCI = tidybayes_diffs2$upper_CI) 
+
+### marginaleffects -----
+margEf_avgPred <- marginaleffects::avg_predictions(mod, 
+                                 type = "response", # set to "link" or "response
+                                 variables = "Trt") |> # grouped expected values
+  summarise(across(2:4, ~ .[2] - .[1])) # group differenece
+
+
+me_row_avg_pred <- tibble(origin = "marginaleffects::avg_predictions", # from fixef as baseline
+          estimate = margEf_avgPred$estimate, 
+          lowerCI = margEf_avgPred$conf.low, 
+          upperCI = margEf_avgPred$conf.high) 
+
+margEf_avgComp <- marginaleffects::avg_comparisons(mod, 
+                                 type = "response", # set to "link" or "response
+                                 variables = "Trt")
+
+
+me_row_avg_comp <- tibble(origin = "marginaleffects::avg_comparisons", # from fixef as baseline
+          estimate = margEf_avgComp$estimate, 
+          lowerCI = margEf_avgComp$conf.low, 
+          upperCI = margEf_avgComp$conf.high) 
+```
+
+
+```{r responsetable}
+response_comparison <- response_comparison |> 
+  add_row(fixef_row) |> 
+  add_row(tidybayes_row) |> 
+  add_row(tidybayes_row2) |> 
+  add_row(me_row_avg_pred) |> 
+  add_row(me_row_avg_comp)
+
+response_comparison
+```
+
+
+The numbers in this table are mode interpretable. They are the expected difference in seizures between the treatment and the control group. 
+
+## Bernoulli / Logistic regression
+Now, let's walk though another example, this time a logistic regression, with a new link function, the `logit()`. To make such a model, let's dichotomize the `count` column into "many" and "not many" seizures, and predict it using the `Trt` variable again.
+
+```{r logistic model}
+
+dat_logistic <- dat |> 
+  mutate(count_many = case_when(count < 10 ~ 0, 
+                                count >= 10 ~ 1, 
+                                TRUE ~ -10)) #test for NAs
+
+
+mod_logistic <- brm(count_many ~ 1 + Trt, 
+                    family = bernoulli(), 
+                    data = dat_logistic,
+                    file = "logistic_model" )
+
+```
+
+
+
+### Link-level comparison
+follow the same steps as above in the poisson model
+```{r link comparison increase logistic}
+
+link_comparison <- tibble(origin = character(), 
+                          estimate = numeric(), 
+                          lowerCI = numeric(), 
+                          upperCI = numeric()) 
+
+## fixef baseline ----
+
+fixef_row <- tibble(origin = "fixef(mod_logistic)", # from fixef as baseline
+          estimate = fixef(mod_logistic)[2,1], 
+          lowerCI = fixef(mod_logistic)[2,3], 
+          upperCI = fixef(mod_logistic)[2,4]) 
+
+
+## tidybayes ----
+tidybayes_diffs <- tidybayes::add_linpred_draws(object = mod_logistic, 
+                                  newdata = dat_logistic, 
+                                  transform = F) |> # set T/F for response / link level
+  group_by(Trt) |> 
+  summarise(mean_linpred = mean(.linpred),
+            lower_CI = quantile(.linpred, probs = 0.025), 
+            upper_CI = quantile(.linpred, probs = 0.975)) |> # group expected values
+  summarise(across(2:4, ~ .[2] - .[1])) # group difference
+
+tidybayes_row <- tibble(origin = "tidybayes1", # from fixef as baseline
+          estimate = tidybayes_diffs$mean_linpred, 
+          lowerCI = tidybayes_diffs$lower_CI, 
+          upperCI = tidybayes_diffs$upper_CI) 
+
+# another way to verify what I do is correct
+a <- tidybayes::add_linpred_draws(object = mod_logistic, 
+                                  newdata = dat_logistic, 
+                                  transform = F) |> 
+  filter(Trt == 1) |> 
+  pull(.linpred) |> 
+  mean_qi(.linpred, .width = c(0.95))
+
+  
+b <- tidybayes::add_linpred_draws(object = mod_logistic, 
+                                  newdata = dat_logistic, 
+                                  transform = F) |> 
+  filter(Trt == 0) |> 
+  pull(.linpred) |> 
+  mean_qi(.linpred, .width = c(0.95))
+
+tidybayes_diffs2 <- tibble(mean_linpred = a$y - b$y, 
+                     lower_CI = a$ymin - b$ymin, 
+                     upper_CI = a$ymax - b$ymax)
+
+tidybayes_row2 <- tibble(origin = "tidybayes2", # from fixef as baseline
+          estimate = tidybayes_diffs2$mean_linpred, 
+          lowerCI = tidybayes_diffs2$lower_CI, 
+          upperCI = tidybayes_diffs2$upper_CI) 
+
+### marginaleffects -----
+margEf_avgPred <- marginaleffects::avg_predictions(mod_logistic, 
+                                 type = "link", # set to "link" or "response
+                                 variables = "Trt") |> # grouped expected values
+  summarise(across(2:4, ~ .[2] - .[1])) # group differenece
+
+
+me_row_avg_pred <- tibble(origin = "marginaleffects::avg_predictions", # from fixef as baseline
+          estimate = margEf_avgPred$estimate, 
+          lowerCI = margEf_avgPred$conf.low, 
+          upperCI = margEf_avgPred$conf.high) 
+
+margEf_avgComp <- marginaleffects::avg_comparisons(mod_logistic, 
+                                 type = "link", # set to "link" or "response
+                                 variables = "Trt")
+
+
+me_row_avg_comp <- tibble(origin = "marginaleffects::avg_comparisons", # from fixef as baseline
+          estimate = margEf_avgComp$estimate, 
+          lowerCI = margEf_avgComp$conf.low, 
+          upperCI = margEf_avgComp$conf.high) 
+```
+Now, put together the table. 
+
+```{r linktable logistic}
+link_comparison <- link_comparison |> 
+  add_row(fixef_row) |> 
+  add_row(tidybayes_row) |> 
+  add_row(tidybayes_row2) |> 
+  add_row(me_row_avg_pred) |> 
+  add_row(me_row_avg_comp)
+
+link_comparison
+  
+```
+
+### Exp_results-level comparison
+
+
+### Expected response level comparison
+Now, let's look at the numbers on the response level. Because we will look at the estimated increase of the probability of having "many" seizures, the by-hand calculations become a bit complicated. Because of the non-linearity of the link-function, and the model-specification, the increase needs to be calculated by first adding Intercept and beta-coefficient, then inverse-linking it, then doing the same with only the intercept, then subtracting these two from one another. The numbers are a good fit for the `conditional_effects()` plot and therefore, I trust them. 
+
+```{r response comparison prep logistic}
+
+response_comparison <- tibble(origin = character(), 
+                          estimate = numeric(), 
+                          lowerCI = numeric(), 
+                          upperCI = numeric()) 
+
+## fixef baseline ----
+# push link-level estimates through the inverse linkfunction
+
+fixef_row <- tibble(origin = "fixef(mod)", # from fixef as baseline
+          estimate = boot::inv.logit(fixef(mod_logistic)[2,1] + fixef(mod_logistic)[1,1]) - boot::inv.logit(fixef(mod_logistic)[1,1]), 
+          lowerCI = boot::inv.logit(fixef(mod_logistic)[2,3] + fixef(mod_logistic)[1,3]) - boot::inv.logit(fixef(mod_logistic)[1,3]), 
+          upperCI = boot::inv.logit(fixef(mod_logistic)[2,4] + fixef(mod_logistic)[1,4]) - boot::inv.logit(fixef(mod_logistic)[1,4])) 
+
+
+## tidybayes ----
+tidybayes_diffs <- tidybayes::add_linpred_draws(object = mod_logistic, 
+                                  newdata = dat_logistic, 
+                                  transform = T) |> # set T/F for response / link level
+  group_by(Trt) |> 
+  summarise(mean_linpred = mean(.linpred),
+            lower_CI = quantile(.linpred, probs = 0.025), 
+            upper_CI = quantile(.linpred, probs = 0.975)) |> # group expected values
+  summarise(across(2:4, ~ .[2] - .[1])) # group difference
+
+tidybayes_row <- tibble(origin = "tidybayes1", # from fixef as baseline
+          estimate = tidybayes_diffs$mean_linpred, 
+          lowerCI = tidybayes_diffs$lower_CI, 
+          upperCI = tidybayes_diffs$upper_CI) 
+
+# another way to verify what I do is correct
+a <- tidybayes::add_linpred_draws(object = mod_logistic, 
+                                  newdata = dat_logistic, 
+                                  transform = T) |> 
+  filter(Trt == 1) |> 
+  pull(.linpred) |> 
+  mean_qi(.linpred, .width = c(0.95))
+
+  
+b <- tidybayes::add_linpred_draws(object = mod_logistic, 
+                                  newdata = dat_logistic, 
+                                  transform = T) |> 
+  filter(Trt == 0) |> 
+  pull(.linpred) |> 
+  mean_qi(.linpred, .width = c(0.95))
+
+tidybayes_diffs2 <- tibble(mean_linpred = b$y - a$y, 
+                     lower_CI = b$ymin - a$ymin, 
+                     upper_CI = b$ymax - a$ymax)
+
+tidybayes_row2 <- tibble(origin = "tidybayes2", # from fixef as baseline
+          estimate = tidybayes_diffs2$mean_linpred, 
+          lowerCI = tidybayes_diffs2$lower_CI, 
+          upperCI = tidybayes_diffs2$upper_CI) 
+
+### marginaleffects -----
+margEf_avgPred <- marginaleffects::avg_predictions(mod_logistic, 
+                                 type = "response", # set to "link" or "response
+                                 variables = "Trt") |> # grouped expected values
+  summarise(across(2:4, ~ .[2] - .[1])) # group differenece
+
+
+me_row_avg_pred <- tibble(origin = "marginaleffects::avg_predictions", # from fixef as baseline
+          estimate = margEf_avgPred$estimate, 
+          lowerCI = margEf_avgPred$conf.low, 
+          upperCI = margEf_avgPred$conf.high) 
+
+margEf_avgComp <- marginaleffects::avg_comparisons(mod_logistic, 
+                                 type = "response", # set to "link" or "response
+                                 variables = "Trt")
+
+
+me_row_avg_comp <- tibble(origin = "marginaleffects::avg_comparisons", # from fixef as baseline
+          estimate = margEf_avgComp$estimate, 
+          lowerCI = margEf_avgComp$conf.low, 
+          upperCI = margEf_avgComp$conf.high) 
+```
+
+
+```{r responsetable logistic}
+response_comparison <- response_comparison |> 
+  add_row(fixef_row) |> 
+  add_row(tidybayes_row) |> 
+  add_row(tidybayes_row2) |> 
+  add_row(me_row_avg_pred) |> 
+  add_row(me_row_avg_comp)
+
+response_comparison
+```
+The numbers in this table indicate the increase in probability of having "many" seizures if one is in the treatment group compared to the control group. I have no clue as to why they are not the same. 
+
+# tl;dr
+
+Both `tidybayes` and `mariginaleffects` have nice functions to get to the estimates of generalized linear models, both on the link, the expected and the prected response levels. 
+
+However, the calculation of the credible intervals is not always consistent. The credible intervals of `marginaleffects::avg_comparisons()` is the closest to the by-hand calculation. 
+
+Caveat: I have only tried this with models with one predictor. These things might change as there are more predictors, because then, [things get more complicated](https://www.andrewheiss.com/blog/2022/05/20/marginalia/index.html). 
+
+
+
+
+
+
+
+
