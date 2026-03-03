@@ -1023,7 +1023,7 @@ Both `tidybayes` and `mariginaleffects` have nice functions to get to the estima
 
 However, the calculation of the credible intervals is not always consistent across link and response levels. The credible intervals of `marginaleffects::avg_comparisons()`, `marginaleffects::predictions()`, and `tidybayes::linpred()` are identical to the CIs of `fixef(model)` on the link-level. But the central tendencies and CIs are slightly off for the response-level estimates, which is because the link-function leads to non-linear behaviour. Essentially, because:
 
-$E(inverse.linkfunction(η) \neq inverse.linkfunction(E(η)$
+$E(inverse.linkfunction(η) \neq inverse.linkfunction(E(η))$
 
 if the link function is not the identity function. 
 
