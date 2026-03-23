@@ -48,6 +48,8 @@ mod <- brm(count ~ 1 + Trt,
                   data = dat, 
                   file = "poisson_model") 
 
+theme_set(theme_bw())
+
 # the linkfunction of the poisson regression is a log()
 ```
 
@@ -1055,7 +1057,7 @@ To simplify, I will dichotomize the `Base` variable with a median-split. I will 
 
 
 ```{r modelfit}
-
+#| output: false
 realistic_data <- dat |> 
   mutate(Base_medianspl = case_when(Base >= 22 ~ "many", 
                                     Base < 22 ~ "few", 
@@ -1128,7 +1130,7 @@ marginaleffects::predictions(mod_realistic,
 
 
 marginaleffects::avg_predictions(mod_realistic, 
-                                 type = "response", 
+                                 type = "link", 
                                  by = "Trt")
 
 
@@ -1353,27 +1355,41 @@ ggplot(mfx, aes(x = draw)) +
          y = "Posterior density",
          fill = "Treatment") 
 ```
+This plot makes it clear that the single slope for age is limited in its usefullness: for all combinations of treatment and baseline seizures, age decreases the number of seizures, but it makes a big difference for the age-effect whether a patient had many or few seizures to begin with: 
 
+```{r}
 
+ggplot(mfx, aes(x = draw, fill = Base_medianspl)) +
+    stat_halfeye(slab_alpha = .5) +
+    labs(x = "Marginal Effect of Age on Seizures",
+         y = "Posterior density",
+         fill = "Treatment") 
+```
 
 # tl;dr
 
-Both `tidybayes` and `mariginaleffects` have nice functions to get to the estimates of generalized linear models, both on the link, the expected and the predicted response levels. They can be made to give the same results. **The most important thing is to always summarize last, work as long as possible with the draws. **
+Both `tidybayes` and `mariginaleffects` have nice functions to get to the estimates of generalized linear models, both on the link, the expected and the predicted response levels. They can be made to give the same results. **The most important thing is to always summarize last, work as long as possible with the draws.**
 
 However, the calculation of the credible intervals is not always consistent across link and response levels. The credible intervals of `marginaleffects::avg_comparisons()`, `marginaleffects::predictions()`, and `tidybayes::linpred()` are identical to the CIs of `fixef(model)` on the link-level. But the central tendencies and CIs are slightly off for the response-level estimates, which is because the link-function leads to non-linear behaviour. Essentially, because:
 
-$E(inverse.linkfunction(η) \neq inverse.linkfunction(E(η))$
+$E(inverse.linkfunction(η)) \neq inverse.linkfunction(E(η))$
 
 if the link function is not the identity function. 
 
-The central tendency of `marginaleffects::avg_comparisons()` is by default the median, which is why, on the link level, it gives a slightly different number than `fixef()` if this is not changed. 
+The central tendency of `marginaleffects` is by default the median, which is why, on the link level, it gives a slightly different number than `fixef()` if this is not changed with: `options("marginaleffects_posterior_center" = "mean", "marginaleffects_posterior_interval" = "eti")`. The eti however is the default. 
+
+
 
 Caveat: I have only tried this with models with one predictor. These things might change as there are more predictors, because then, [things get more complicated](https://www.andrewheiss.com/blog/2022/05/20/marginalia/index.html). 
 
-
-
-
-
+| Level | tidybayes | marginaleffects |
+| :--- | :--- | :--- |
+| **Link-level** | `add_linpred_draws(model)` | `predictions(model, type = "link")` |
+| **Expected-response level** | `add_epred_draws(model)`|`predictions(model, type = "response")`|
+| **Predicted-response level** | `add_predicted_draws(model)` | `predictions(model, type = "prediction")`|
+| **Slopes** | Don't know yet how to do this | `avg_slopes(model,` <br> `type = "link" / "response" / "prediction",` <br> `variables = "continuous_variable_name")` |
+| **And then?** |Then compare and summarize as needed | `avg_predictions(model,`<br> `type = "link" / "response" / "prediction",` <br> `by = c("var1", "var2"))` <br> or `get_draws()`, compare and summarize as needed. | `predictions(model, type = "response")` |
+| **Central Tendency & CI** | get central tendency and CI by hand using `quantile()` for ETI, or `hdi()` for HDI. | `options("marginaleffects_posterior_center" = "median",`<br> `"marginaleffects_posterior_interval" = "eti")` |
 
 
 
