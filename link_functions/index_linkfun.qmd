@@ -19,7 +19,7 @@ I will illustrate this, using Bayesian regressions fitted with `brms`. In genera
 
 `tidybayes` makes access to these draws simpler by providing them in a tidy format as a tibble rather than a matrix. Based on this direct access to the posterior, summary statistics can be computed / plotted.
 
-`marginaleffects` uses the `insight` package to provide marginal means and constrasts for a given model. It provides the `predictions()` functions to get predictions for each observation of an existing or a synthetic data set, and the `comparisons()` function to take easily the difference between e.g. groups. In addition, the `slopes()` function gives easy access to the interpretation of the parameter estimates of continuous predictors. All three can have the prefix `avg_`before them to take the average of the above. 
+`marginaleffects` uses the `insight` package to provide marginal means and constrasts for a given model. It provides the `predictions()` functions to get predictions for each observation of an existing or a synthetic data set, and the `comparisons()` function to take easily the difference between e.g. groups. In addition, the `slopes()` function gives easy access to the interpretation of the parameter estimates of continuous predictors. All three can have the prefix `avg_`before them to take the average of the above. A lot of nice examples for `brms` models can be found [here](https://marginaleffects.com/bonus/brms.html).    
  
 In the first section, I collect the different functions from the different packages and compare them to each other, to be best of my understanding. In the second section, I go through two examples. 
 
@@ -142,7 +142,13 @@ fixef(mod)[2]
 
 The `get_draws(a)` however makes a bit more sense, its mean is exactly the same as the mean of `brms::posterior_linpred(mod)`. The `mean(exp(b$draw))` gives again the average predicted number of seizures, now on the response level because the draw on the link-level is back-converted through the inverse link function.
 
-Then, to do summaries, there is the `avg_predictions()` and `avg_comparisons()` function. 
+Then, to do summaries, there is the `avg_predictions()` and `avg_comparisons()` function. The `comparisons()`function takes a counterfactual approach by: 
+1) Modify the original dataset to fix for all observations, and compute predictions for every row.
+2) Modify the original dataset to fix for all observations, and compute predictions for every row.
+3) Calculate the average difference between the counterfactual predictions computed in steps 1 and 2.
+
+See [this website](https://marginaleffects.com/chapters/comparisons.html) for more info.
+
 ```{r link level funs marignaleffects}
 ## these two give the same. I am not sure why
 # averaged over the predictions() from above: 
@@ -218,7 +224,7 @@ c <- get_draws(b) # or (a), gives a tibble with n_chain*n_sample*n_observations 
 Compare conditions, overall numbers
 ```{r resp marginaleffects avg}
 
-marginaleffects::avg_predictions(mod, type = "response", variables = "Trt") 
+marginaleffects::avg_predictions(mod, type = "response", by = "Trt") 
 # tibble with the mean of the predictions for each row of the dataset that was used fitting the model (is not the same as observation in the dataset if you did not impute, i.e. observations with a missing will not get a prediction)
 
 marginaleffects::avg_predictions(mod, type = "response", newdata = dat) # prediction for each row of the dataset
@@ -230,8 +236,8 @@ Directly compare the two conditions
 ```{r resp marginaleffects comparison}
 #compare the estimates by taking the difference
 
-marginaleffects::comparisons(mod, variables = "Trt", type = "response")
-marginaleffects::avg_comparisons(mod, variables = "Trt", type = "response")
+marginaleffects::comparisons(mod, by = "Trt", type = "response")
+marginaleffects::avg_comparisons(mod, by = "Trt", type = "response")
 ```
 
 
@@ -416,7 +422,7 @@ me_row_avg_pred_correct <- marginaleffects::predictions(mod,
 
 margEf_avgPred <- marginaleffects::avg_predictions(mod, 
                                  type = "link", # set to "link" or "response
-                                 variables = "Trt") |> # grouped expected values
+                                 by = "Trt") |> # grouped expected values
   summarise(across(2:4, ~ .[2] - .[1])) # group differenece
 
 
@@ -430,7 +436,7 @@ me_row_avg_pred_w <- tibble(origin = "marginaleffects::avg_predictions_wrong", #
 # do it with the comparisons function
 margEf_avgComp <- marginaleffects::avg_comparisons(mod, 
                                  type = "link", # set to "link" or "response
-                                 variables = "Trt")
+                                 by = "Trt")
 
 
 me_row_avg_comp <- tibble(origin = "marginaleffects::avg_comparisons_mean", # from fixef as baseline
@@ -1039,6 +1045,315 @@ cowplot::plot_grid(tidybayes_draws, marginaleff_pred_draws, nrow = 2,
 
 ```
 
+# More realistic workflow - 2x2 interaction and continuous predictor
+
+Lets say, we want to estimate the number of seizures by the interaction of Base and Treatment, controlled for age, i.e. the following model formula: 
+
+$count \sim Base * Trt + zAge $
+
+To simplify, I will dichotomize the `Base` variable with a median-split. I will show how to get at the estimated effects of the main effects, interactions, and how to make sense of the age predictor, which is continuous. I will get the draws for expected values, not the predicted ones. 
+
+
+```{r modelfit}
+
+realistic_data <- dat |> 
+  mutate(Base_medianspl = case_when(Base >= 22 ~ "many", 
+                                    Base < 22 ~ "few", 
+                                    TRUE ~ "error"))
+
+mod_realistic <- brm(data = realistic_data, 
+                     formula = bf(count ~ Base_medianspl * Trt + zAge), 
+                     family = poisson(), 
+                     file = "realistic_model")
+
+
+
+draws <- mod_realistic |> 
+  add_epred_draws(newdata = realistic_data) # this helps to let the draws not get too big, else they will take up too much RAM when you have several models in a project.
+
+```
+
+
+
+## Main effect treatment
+First look at the average effect of the treatment, averaged over all `Base` values, and for a `zAge` of 0, i.e. average age. 
+
+```{r real maineff trt}
+### descriptives
+draws |> 
+  group_by(.draw, Trt) |> 
+  summarise(.epred = mean(.epred, na.rm = T)) |> 
+  group_by(Trt) |> 
+  summarize(est = mean(.epred), 
+            lowerCI = quantile(.epred, probs = 0.025), 
+            upperCI = quantile(.epred, probs = 0.975))
+
+
+### compute the difference between the two conditions
+draws |> 
+  group_by(.draw, Trt) |> 
+  summarise(.epred = mean(.epred, na.rm = T)) |> 
+  pivot_wider(names_from = Trt, values_from = .epred) |> 
+  mutate(diff_Trt = `0` - `1`, .keep = "unused") |> 
+  ungroup() |> 
+  summarise(est = mean(diff_Trt), 
+            lCI = quantile(diff_Trt, probs = 0.025), 
+            uCI = quantile(diff_Trt, probs = 0.975))
+
+# have a look at the differences
+draws |> 
+  ggplot(aes(x = .epred, color = Trt)) + 
+  geom_density()
+
+```
+
+Interpretation: Patients with no treatment had an expected average seizure number of 8.59 (CI = [8.09; 9.13]), patients with treatment had an expected average seizure number of 7.97 (CI = [7.50; 8.46]). The difference between the two groups was 0.623 (CI = [-0.0180  1.38]).
+
+This can also be calculated with the `marginaleffects` package:
+```{r}
+options("marginaleffects_posterior_center" = "mean", # not the default
+        "marginaleffects_posterior_interval" = "eti")
+
+
+marginaleffects::predictions(mod_realistic,
+  newdata = realistic_data,
+  type = "response") |>
+  get_draws() |> 
+  group_by(drawid, Trt) |> 
+  summarise(estimate = mean(draw, na.rm = T)) |> 
+  group_by(Trt) |> 
+  summarize(est = mean(estimate), 
+            lowerCI = quantile(estimate, probs = 0.025), 
+            upperCI = quantile(estimate, probs = 0.975))
+
+
+marginaleffects::avg_predictions(mod_realistic, 
+                                 type = "response", 
+                                 by = "Trt")
+
+
+```
+
+
+
+## Main effect `Base`
+
+To get to the "effect" of the Baseline of seizures, averaged over both treatment groups, and for the `zAge` of 0. 
+
+```{r}
+draws |> 
+  group_by(.draw, Base_medianspl) |> 
+  summarise(.epred = mean(.epred, na.rm = T)) |> 
+  group_by(Base_medianspl) |> 
+  summarize(est = mean(.epred), 
+            lowerCI = quantile(.epred, probs = 0.025), 
+            upperCI = quantile(.epred, probs = 0.975))
+
+
+### compute the difference between the two groups
+draws |> 
+  group_by(.draw, Base_medianspl) |> 
+  summarise(.epred = mean(.epred, na.rm = T)) |> 
+  pivot_wider(names_from = Base_medianspl, values_from = .epred) |> 
+  mutate(diff_base = many - few, .keep = "unused") |> 
+  ungroup() |> 
+  summarise(est = mean(diff_base), 
+            lCI = quantile(diff_base, probs = 0.025), 
+            uCI = quantile(diff_base, probs = 0.975))
+
+# have a look at the differences
+draws |> 
+  ggplot(aes(x = .epred, color = Base_medianspl)) + 
+  geom_density()
+
+```
+
+
+Patients starting with "few" seizures had an expected seizure number of 3.03 (CI = [2.71; 3.36]), those with "many" had an expected seizure number of 12.67 (CI = [12.06; 13.27]). The difference of expected seizures was 9.64 (CI = [8.95;  10.3]). Whether or not this difference is meaningful depends on the ROPE - the region of practical equivalence - that one should define beforehand. This is another topic in its own right. 
+
+
+This can also be calculated with the `marginaleffects` package:
+```{r}
+options("marginaleffects_posterior_center" = "mean", # not the default
+        "marginaleffects_posterior_interval" = "eti")
+
+
+marginaleffects::predictions(mod_realistic,
+  newdata = realistic_data,
+  type = "response") |>
+  get_draws() |> 
+  group_by(drawid, Base_medianspl) |> 
+  summarise(estimate = mean(draw, na.rm = T)) |> 
+  group_by(Base_medianspl) |> 
+  summarize(est = mean(estimate), 
+            lowerCI = quantile(estimate, probs = 0.025), 
+            upperCI = quantile(estimate, probs = 0.975))
+
+
+marginaleffects::avg_predictions(mod_realistic, 
+                                 type = "response", 
+                                 by = "Base_medianspl")
+
+
+```
+
+
+## Interaction `treatment` and `base`
+The interaction shows, whether the treatment-effect differs in the two clusters of patients, i.e. whether one patient group profits more from the treatment. See [this site](https://marginaleffects.com/chapters/interactions.html) for more infos about the `marginaleffects`side of things.
+
+
+```{r interaction}
+
+# difference of treatment effect in the two groups
+draws |> 
+  group_by(.draw, Base_medianspl, Trt) |> 
+  summarise(.epred = mean(.epred, na.rm = T)) |> 
+  group_by(Base_medianspl) |> 
+  pivot_wider(names_from = Trt, values_from = .epred) |> 
+  mutate(diff_Trt = `0` - `1`, .keep = "unused") |> 
+  group_by(Base_medianspl) |> 
+  summarize(est = mean(diff_Trt), 
+            lowerCI = quantile(diff_Trt, probs = 0.025), 
+            upperCI = quantile(diff_Trt, probs = 0.975))
+
+
+### compute the difference of the treatment-differences between the two groups
+draws |> 
+  group_by(.draw, Base_medianspl, Trt) |> 
+  summarise(.epred = mean(.epred, na.rm = T)) |> 
+  group_by(Base_medianspl) |> 
+  pivot_wider(names_from = Trt, values_from = .epred) |> 
+  mutate(diff_Trt = `0` - `1`, .keep = "unused") |> 
+  pivot_wider(names_from = Base_medianspl, values_from = diff_Trt) |> 
+  mutate(diff_groups = many - few, .keep = "unused") |> 
+  ungroup() |> 
+  summarise(est = mean(diff_groups), 
+            lCI = quantile(diff_groups, probs = 0.025), 
+            uCI = quantile(diff_groups, probs = 0.975))
+
+# have a look at the differences
+draws |> 
+  ggplot(aes(x = .epred, color = Trt)) + 
+  geom_density() + 
+  facet_grid(.~Base_medianspl)
+  
+
+```
+
+The treatment reduced expected seizure counts in both groups, but to different degrees. For people who started the treatment with "few" seizures, the reduction was 0.950 (CI = [0.295; 1.59]), for those with "many" seizures, it was 3.10 (CI = [1.83; 4.35]). The difference of the group-differences was 2.15 (CI = [0.725; 3.56]). Whether this difference is big enough to make us care should be determined with a ROPE. But this approach allows to formulate a ROPE on the outcome level and then compare the expected values to this ROPE. 
+
+
+This can also be calculated with the `marginaleffects` package, See [here](# see https://marginaleffects.com/chapters/interactions.html#categorical-by-categorical) for more. For a contrast between `predictions()` and `comparisons()`, see [here](https://marginaleffects.com/chapters/comparisons.html#sec-comparisons_average_predictions_vs_comparisons). 
+
+```{r}
+options("marginaleffects_posterior_center" = "mean", # not the default
+        "marginaleffects_posterior_interval" = "eti")
+
+
+marginaleffects::predictions(mod_realistic,
+  newdata = realistic_data,
+  type = "response") |>
+  get_draws() |> 
+  group_by(drawid, Base_medianspl, Trt) |> 
+  summarise(.epred = mean(draw, na.rm = T)) |> 
+  group_by(Base_medianspl) |> 
+  pivot_wider(names_from = Trt, values_from = .epred) |> 
+  mutate(diff_Trt = `0` - `1`, .keep = "unused") |> 
+  group_by(Base_medianspl) |> 
+  summarize(est = mean(diff_Trt), 
+            lowerCI = quantile(diff_Trt, probs = 0.025), 
+            upperCI = quantile(diff_Trt, probs = 0.975))
+
+
+marginaleffects::avg_predictions(mod_realistic, 
+                                 type = "response", 
+                                 by = c("Base_medianspl", "Trt"))
+
+marginaleffects::avg_comparisons(mod_realistic,  
+                                 variables = "Trt", 
+                                 by = "Base_medianspl") # this gives a slightly different result, because it takes a counterfactual approach and contrasts all expected values if all rows had Treatment = 1 vs all rows if they had treatment = 0. But its in the same ballpark. 
+
+
+marginaleffects::plot_predictions(mod_realistic, 
+                                 type = "response", 
+                                 by = c("Base_medianspl", "Trt")) # this give the same plot as: conditional_effects(mod_realistic)
+
+
+```
+
+
+
+## Slopes
+The interpretation of the slope-parameter in a simple linear regression is simple: one unit change of the predictor translates to a slope-parameter-sized change in the expected value of dependent variable. In a generalized linear regression, this becomes more complicated: one unit change of the predictor translates to a slope-parameter-sized change in the link-function-transformed expected value of the dependent variable. This also means that a one unit increase on the link level does not lead to the same increase for all values of the predictor. Let's illustrate this using the age-predictor. I cannot get my head around how to do this with `tidybayes`, so I will only do it with `marginaleffects`, which provides very nice functions. See [here](marginaleffects.com/bonus/brms.html#slopes) for more infos. 
+
+First, let's look at the overall effect of age on seizures. We can see that seizures decrease in older patients. This is true for both Base-groups and for both treatment groups. 
+```{r}
+plot_predictions(mod_realistic,
+  variables = "zAge",
+  condition = c("zAge", "Trt", "Base_medianspl"), type = "response")+ 
+  labs(title = "How age impacts the seizures.", 
+       subtitle = "For the different conditions.")
+```
+
+Next, lets look at how the slope (or the effect of age on seizures) changes over the different ages. 
+```{r}
+plot_slopes(mod_realistic,
+  variables = "zAge",
+  condition = c("zAge", "Trt", "Base_medianspl"), type = "response") + 
+  labs(title = "How the effect of age on the seizures changes, as age increases.", 
+       subtitle = "For the different conditions.")
+```
+This plot becomes a line if we go to the link-level, which makes sense: the slope is the same for all ages on the link level, because it is a line. 
+
+```{r}
+plot_slopes(mod_realistic,
+  variables = "zAge",
+  condition = c("zAge", "Trt", "Base_medianspl"), type = "link") 
+```
+
+But to describe the results, we are interested in the average, or marginal effect of age on expected seizures. To get to this, we first plot:
+
+```{r}
+mfx <- slopes(mod_realistic,
+    variables = "zAge",
+    newdata = datagrid(Trt = 0:1, Base_medianspl = c("many", "few")), 
+    type = "response") |>
+    get_draws()
+
+ggplot(mfx, aes(x = draw, fill = factor(Trt))) +
+    stat_halfeye(slab_alpha = .5) +
+    labs(x = "Marginal Effect of Age on Seizures",
+         y = "Posterior density",
+         fill = "Treatment") + 
+  facet_grid(.~Base_medianspl)
+```
+
+The best-off patients (in terms of age benefit, not in general) are the ones with many seizures to begin with and no treatment: Their age reduces their seizures the most per year of life (up to 1.5 seizures for example). To get the numbers of the average slope, we can do: 
+
+```{r}
+
+
+avg_slopes(mod_realistic, type = "response", variables = "zAge")
+
+
+```
+
+
+And to get that in a plot: 
+```{r}
+
+mfx <- slopes(mod_realistic,
+    variables = "zAge", 
+    type = "response") |>
+    get_draws()
+
+ggplot(mfx, aes(x = draw)) +
+    stat_halfeye(slab_alpha = .5) +
+    labs(x = "Marginal Effect of Age on Seizures",
+         y = "Posterior density",
+         fill = "Treatment") 
+```
+
 
 
 # tl;dr
@@ -1054,6 +1369,8 @@ if the link function is not the identity function.
 The central tendency of `marginaleffects::avg_comparisons()` is by default the median, which is why, on the link level, it gives a slightly different number than `fixef()` if this is not changed. 
 
 Caveat: I have only tried this with models with one predictor. These things might change as there are more predictors, because then, [things get more complicated](https://www.andrewheiss.com/blog/2022/05/20/marginalia/index.html). 
+
+
 
 
 
