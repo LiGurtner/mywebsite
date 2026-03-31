@@ -29,11 +29,12 @@ knitr::opts_chunk$set(fig.pos = 'H',
 ## Education - degrees
 ```{r}
 edu <- read.csv("edu.csv") 
+n_rows <- nrow(edu)
 names(edu) <- NULL 
 kableExtra::kable(edu, kable_format = "html", align = c("r", "l")) |> 
   kableExtra::column_spec(1, 
                           width_min = "4cm") |> 
-  kableExtra::row_spec(row = 1:10, extra_css = "line-height: 1.2;
+  kableExtra::row_spec(row = 1:n_rows, extra_css = "line-height: 1.2;
                        padding: 10px")
 ```
 
@@ -115,7 +116,9 @@ kableExtra::kable(persComp, kable_format = "html") |>
 
 ## Outreach activities
 
+- Participation in a workshop on attractive sufficiency narratives by the [Community Fund of the Mercator Stiftung](https://www.stiftung-mercator.ch/en/offers/community-fund) and the [One Planet Lab](https://www.one-planet-lab.ch/) (January 2026)
 - Co-Moderation of the Swiss Climate Podcast [Treibhaus](https://treibhauspodcast.ch/) (since November 2025)
+- Organization of "Lunch Discussions" together with the [ESD](https://bne.unibe.ch/index_eng.html) and the SUB - Lunches open to all members of the University of Bern, with guiding questions around sustainability [[link]](https://bne.unibe.ch/community/lunch_discussion/index_ger.html) (2024, 2026)
 - Participation in living library discussion on "Psychology and Transformation: what can they learn from each other?" [Living Library](https://scich.org/en/local-projects/living-library/) (18.09.2024)
 - Member of researcher panel in the [„stories for future“ project](https://storiesforfuture.ch/) (since 2024)
 - Presentation in the Eco Summer Camp (2024)
