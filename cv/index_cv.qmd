@@ -28,9 +28,11 @@ knitr::opts_chunk$set(fig.pos = 'H',
 
 ## Education - degrees
 ```{r}
+
 edu <- read.csv("edu.csv") 
-n_rows <- nrow(edu)
+
 names(edu) <- NULL 
+n_rows <- nrow(edu)
 kableExtra::kable(edu, kable_format = "html", align = c("r", "l")) |> 
   kableExtra::column_spec(1, 
                           width_min = "4cm") |> 
@@ -43,10 +45,11 @@ kableExtra::kable(edu, kable_format = "html", align = c("r", "l")) |>
 ```{r}
 edu_further <- read.csv("Further_edu.csv") 
 names(edu_further) <- NULL 
+n_rows <- nrow(edu_further)
 kableExtra::kable(edu_further, kable_format = "html", align = c("r", "l")) |> 
   kableExtra::column_spec(1, 
                           width_min = "4cm") |> 
-  kableExtra::row_spec(row = 1:23, extra_css = "line-height: 1.2;
+  kableExtra::row_spec(row = 1:n_rows, extra_css = "line-height: 1.2;
                        padding: 10px")
 ```
 ## Employment
@@ -59,7 +62,7 @@ kableExtra::kable(empl, kable_format = "html", align = c("r", "l")) |>
                           width_min = "4cm") |> 
   kableExtra::row_spec(row = 1:10, extra_css = "line-height: 1.2;
                        padding: 10px") |> 
-  kableExtra::row_spec(row = c(4,6, 8, 10), bold = TRUE, italic = T, color = "grey")
+  kableExtra::row_spec(row = c(4,6, 8, 10), bold = TRUE, italic = T, color = "gray")
 ```
 
 
@@ -93,7 +96,7 @@ kableExtra::kable(teach,
 grants <- read.csv("Grants.csv") 
 names(grants) <- NULL 
 n_row <- nrow(grants)
-kableExtra::kable(grants, kable_format = "html",  align = c("r", "l")) |> 
+kableExtra::kable(grants, kable_format = "html",  align = c("l", "l", "r", "r")) |> 
   kableExtra::column_spec(1, 
                           width_min = "4cm") |> 
   kableExtra::row_spec(row = 1:n_row, 

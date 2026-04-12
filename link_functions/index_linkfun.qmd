@@ -20,6 +20,7 @@ I will illustrate this, using Bayesian regressions fitted with `brms`. In genera
 `tidybayes` makes access to these draws simpler by providing them in a tidy format as a tibble rather than a matrix. Based on this direct access to the posterior, summary statistics can be computed / plotted.
 
 `marginaleffects` uses the `insight` package to provide marginal means and constrasts for a given model. It provides the `predictions()` functions to get predictions for each observation of an existing or a synthetic data set, and the `comparisons()` function to take easily the difference between e.g. groups. In addition, the `slopes()` function gives easy access to the interpretation of the parameter estimates of continuous predictors. All three can have the prefix `avg_`before them to take the average of the above. A lot of nice examples for `brms` models can be found [here](https://marginaleffects.com/bonus/brms.html).    
+If you are interested in the `emmeans` package, [see this comparison](https://www.andrewheiss.com/blog/2022/05/20/marginalia/#tldr-overall-summary-of-all-these-marginal-effects-approaches) with `marginaleffects`.
  
 In the first section, I collect the different functions from the different packages and compare them to each other, to be best of my understanding. In the second section, I go through two examples. 
 

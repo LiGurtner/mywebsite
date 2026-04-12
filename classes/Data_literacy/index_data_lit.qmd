@@ -14,7 +14,7 @@ output:
     citation_package: natbib
     latex_engine: xelatex
 bibliography: My Library.bib
-link-citations: no
+link-citations: false
 ---
 
 ```{r setup1, include=FALSE}

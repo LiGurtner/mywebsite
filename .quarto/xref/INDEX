@@ -1,27 +1,35 @@
 {
   "research/index_research.qmd": {
-    "index_research.html": "2420f57a"
+    "index_research.html": "2420f57a",
+    "index_research.tex": "b0b23bf7"
   },
   "404.qmd": {
-    "404.html": "2e4429d0"
+    "404.html": "2e4429d0",
+    "404.tex": "d9898836"
   },
   "classes/Data_literacy/index_data_lit.qmd": {
-    "index_data_lit.html": "6685e766"
+    "index_data_lit.html": "6685e766",
+    "index_data_lit.tex": "e0747404"
   },
   "classes/SustainabANDpsy/Syllabus_Psychology_Sustainability.qmd": {
     "Syllabus_Psychology_Sustainability.html": "503eecec"
   },
   "publications/index_pub.qmd": {
-    "index_pub.html": "c153d2de"
+    "index_pub.html": "c153d2de",
+    "index_pub.tex": "1636e1ea"
   },
   "index.qmd": {
-    "index.html": "660e5116"
+    "index.html": "660e5116",
+    "index.tex": "759beae9"
   },
   "cv/index_cv.qmd": {
-    "index_cv.html": "3b7008eb"
+    "index_cv.html": "3b7008eb",
+    "index_cv.tex": "b118d841"
   },
   "cv/index.ipynb": {
-    "index.html": "6a801be1"
+    "index.html": "6a801be1",
+    "index.pdf": "a82fa525",
+    "index.tex": "aabfbad8"
   },
   "classes/fake-news-game/fake-news-game.qmd": {
     "fake-news-game.html": "bd9e2ba8"
@@ -38,6 +46,10 @@
     "CV_pdf_print.tex": "cf298db9"
   },
   "link_functions/index_linkfun.qmd": {
-    "index_linkfun.html": "a9548359"
+    "index_linkfun.html": "a9548359",
+    "index_linkfun.tex": "06bc23a5"
+  },
+  "index_research.qmd": {
+    "index_research.html": "4498d8b8"
   }
 }
