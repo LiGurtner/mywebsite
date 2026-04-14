@@ -29,6 +29,8 @@ website:
         menu:
           - text: "Fun with linkfunctions"
             href: link_functions/index_linkfun.qmd
+          - text: "Optimal vigniettes"
+            href: optimal_vigniettes/index_optimal_vigniettes.qmd
         # your social media handles
     right:
       - icon: envelope

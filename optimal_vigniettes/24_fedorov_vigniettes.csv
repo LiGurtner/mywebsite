@@ -1,0 +1,25 @@
+n_vigniettes,vigniette_id,level,degree,wage,form,vigniette_number
+24,firm_20_full compensation_workday,firm,20,full compensation,workday,1
+24,firm_10_graded compensation_workday,firm,10,graded compensation,workday,2
+24,firm_20_no compensation_workday,firm,20,no compensation,workday,3
+24,law_10_graded compensation_workweek,law,10,graded compensation,workweek,4
+24,firm_20_full compensation_workweek,firm,20,full compensation,workweek,5
+24,firm_20_graded compensation_workweek,firm,20,graded compensation,workweek,6
+24,firm_10_no compensation_vacation,firm,10,no compensation,vacation,7
+24,law_20_no compensation_workday,law,20,no compensation,workday,8
+24,industry_20_graded compensation_workday,industry,20,graded compensation,workday,9
+24,industry_10_full compensation_workday,industry,10,full compensation,workday,10
+24,law_10_full compensation_workday,law,10,full compensation,workday,11
+24,industry_10_graded compensation_workweek,industry,10,graded compensation,workweek,12
+24,industry_10_no compensation_vacation,industry,10,no compensation,vacation,13
+24,industry_10_no compensation_workweek,industry,10,no compensation,workweek,14
+24,industry_20_no compensation_workweek,industry,20,no compensation,workweek,15
+24,law_20_no compensation_workweek,law,20,no compensation,workweek,16
+24,firm_10_full compensation_vacation,firm,10,full compensation,vacation,17
+24,industry_20_full compensation_vacation,industry,20,full compensation,vacation,18
+24,law_10_no compensation_workday,law,10,no compensation,workday,19
+24,industry_20_graded compensation_vacation,industry,20,graded compensation,vacation,20
+24,law_20_full compensation_vacation,law,20,full compensation,vacation,21
+24,firm_10_graded compensation_vacation,firm,10,graded compensation,vacation,22
+24,law_10_full compensation_workweek,law,10,full compensation,workweek,23
+24,law_20_graded compensation_vacation,law,20,graded compensation,vacation,24

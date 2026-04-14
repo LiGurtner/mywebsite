@@ -34,6 +34,16 @@ An example generalized linear regression model. For the moment, we work with a s
 #| echo: true
 #| output: false
 
+my_cache = T
+knitr::opts_chunk$set(fig.pos = 'H',
+                      cache = my_cache,
+                      cache.path = "chache/",
+                      dpi = 600,
+                      fig.path = "figs/",
+                      fig.align = "center", 
+                      fig.asp = 0.62) # goldener 
+
+
 library(tidyverse)
 library(brms)
 library(marginaleffects)

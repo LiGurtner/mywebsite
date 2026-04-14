@@ -179,6 +179,10 @@ window.Quarto = {
     <a class="dropdown-item" href="../link_functions/index_linkfun.html">
  <span class="dropdown-text">Fun with linkfunctions</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../optimal_vigniettes/index_optimal_vigniettes.html">
+ <span class="dropdown-text">Optimal vigniettes</span></a>
+  </li>  
     </ul>
 </li>
 </ul>
@@ -289,7 +293,17 @@ If you are interested in the <code>emmeans</code> package, <a href="https://www.
 <section id="setup" class="level1"><h1>Setup</h1>
 <p>An example generalized linear regression model. For the moment, we work with a single predictor with only two levels.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_cache</span> <span class="op">=</span> <span class="cn">T</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html">opts_chunk</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span>fig.pos <span class="op">=</span> <span class="st">'H'</span>,</span>
+<span>                      cache <span class="op">=</span> <span class="va">my_cache</span>,</span>
+<span>                      cache.path <span class="op">=</span> <span class="st">"chache/"</span>,</span>
+<span>                      dpi <span class="op">=</span> <span class="fl">600</span>,</span>
+<span>                      fig.path <span class="op">=</span> <span class="st">"figs/"</span>,</span>
+<span>                      fig.align <span class="op">=</span> <span class="st">"center"</span>, </span>
+<span>                      fig.asp <span class="op">=</span> <span class="fl">0.62</span><span class="op">)</span> <span class="co"># goldener </span></span>
+<span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paul-buerkner/brms">brms</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://marginaleffects.com/">marginaleffects</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mjskay.github.io/tidybayes/">tidybayes</a></span><span class="op">)</span></span>
@@ -316,7 +330,7 @@ If you are interested in the <code>emmeans</code> package, <a href="https://www.
 <section id="draws-on-the-link-level" class="level2"><h2 class="anchored" data-anchor-id="draws-on-the-link-level">Draws on the link-level</h2>
 <p>The following functions can be used to get to the posterior samples on the link-level, that is, on the level of the linear regression term. This is, what is also returned in <code>summary(model)</code>.</p>
 <section id="using-brms-package" class="level3"><h3 class="anchored" data-anchor-id="using-brms-package">using <code>brms</code> package</h3>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">brms</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstantools/reference/posterior_linpred.html">posterior_linpred</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span> </span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -325,7 +339,7 @@ If you are interested in the <code>emmeans</code> package, <a href="https://www.
 </div>
 <p>Produces a matrix with n_samples (rows) x n_observations (cols), contains 4000 predictions on the level of the link function for each observation.</p>
 </section><section id="using-tidybayes-functions" class="level3"><h3 class="anchored" data-anchor-id="using-tidybayes-functions">using <code>tidybayes</code> functions</h3>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">tidybayes</span><span class="fu">::</span><span class="fu"><a href="https://mjskay.github.io/tidybayes/reference/tidy_draws.html">tidy_draws</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span> </span>
 <span><span class="co"># tibble with length = n_chains*n_draws (postwarump) </span></span>
 <span><span class="co"># contains the samples from the posterior in column b_Trt1 + other indicators for model diagnostics</span></span>
@@ -367,7 +381,7 @@ Trt1      -0.07577729 0.04572413 -0.1659439 0.0119442</code></pre>
 <p><code>mean(exp(c$.linpred))</code> = 8.2543903 is the average predicted number of seizures, now on the response level because the .linpred is back-converted through the inverse link function (in this case <code><a href="https://rdrr.io/r/base/Log.html">exp()</a></code>.</p>
 </section><section id="using-marginaleffects-package" class="level3"><h3 class="anchored" data-anchor-id="using-marginaleffects-package">using <code>marginaleffects</code> package</h3>
 <p>The default of the <code>marginaleffects</code> package in terms of reporting is that for central tendencies, they take the median. This leads to sometimes slightly different numbers than <code>tidybayes</code> and <code>brms</code>. To change this, we set it to the mean, even thought I think the median is a sensible default.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>marginaleffects_posterior_center <span class="op">=</span> <span class="va">mean</span><span class="op">)</span> <span class="co"># the default is the median, but later on, we compare with the mean</span></span>
 <span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html">predictions</a></span><span class="op">(</span><span class="va">mod</span>, type <span class="op">=</span> <span class="st">"link"</span><span class="op">)</span></span>
 <span><span class="co"># tibble with the estimate column giving the link-level estimates for the different groups. no variance, just intercept + b*x</span></span>
@@ -384,7 +398,7 @@ Trt1      -0.07577729 0.04572413 -0.1659439 0.0119442</code></pre>
 <span><span class="co"># this can be used to summarize the posterior distribution</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The difference between the two estimates of the two conditions, <code>unique(a$estimate)</code> = 2.1493224, 2.0735451, is the same as the beta coefficient of the model itself:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">estimate</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">estimate</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -0.07577729</code></pre>
@@ -397,7 +411,7 @@ Trt1      -0.07577729 0.04572413 -0.1659439 0.0119442</code></pre>
 <p>The <code>get_draws(a)</code> however makes a bit more sense, its mean is exactly the same as the mean of <code>brms::posterior_linpred(mod)</code>. The <code>mean(exp(b$draw))</code> gives again the average predicted number of seizures, now on the response level because the draw on the link-level is back-converted through the inverse link function.</p>
 <p>Then, to do summaries, there is the <code><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html">avg_predictions()</a></code> and <code><a href="https://rdrr.io/pkg/marginaleffects/man/comparisons.html">avg_comparisons()</a></code> function. The <code><a href="https://rdrr.io/pkg/marginaleffects/man/comparisons.html">comparisons()</a></code>function takes a counterfactual approach by: 1) Modify the original dataset to fix for all observations, and compute predictions for every row. 2) Modify the original dataset to fix for all observations, and compute predictions for every row. 3) Calculate the average difference between the counterfactual predictions computed in steps 1 and 2.</p>
 <p>See <a href="https://marginaleffects.com/chapters/comparisons.html">this website</a> for more info.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## these two give the same. I am not sure why</span></span>
 <span><span class="co"># averaged over the predictions() from above: </span></span>
 <span><span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html">avg_predictions</a></span><span class="op">(</span><span class="va">mod</span>, type <span class="op">=</span> <span class="st">"link"</span>, variables <span class="op">=</span> <span class="st">"Trt"</span><span class="op">)</span> <span class="co"># this gives the predictions for the two treatment conditions</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -421,7 +435,7 @@ Comparison: 1 - 0</code></pre>
 </div>
 </div>
 <p>To test what they write on their webpage: ” <a href="https://marginaleffects.com/bonus/brms.html">type = “link”: Compute posterior draws of the linear predictor using the brms::posterior_linpred function.</a>“, let’s compare the two directly:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html">predictions</a></span><span class="op">(</span><span class="va">mod</span>, type <span class="op">=</span> <span class="st">"link"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">estimate</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -438,7 +452,7 @@ Comparison: 1 - 0</code></pre>
 <section id="using-brms" class="level3"><h3 class="anchored" data-anchor-id="using-brms">using <code>brms</code>
 </h3>
 <p>Again, <code>brms</code> returns matrices, that are not super handy to work with, but these are the basis for the following functions. In this case, the <code>_linpred(model, transform = TRUE)</code> gives the same result, as the <code>_epred()</code>, but this is not always the case, see <a href="https://www.andrewheiss.com/blog/2022/09/26/guide-visualizing-types-posteriors/#when-posterior_epred-isnt-just-the-back-transformed-linear-predictor">here</a>, and <a href="https://github.com/mjskay/uncertainty-examples/blob/master/linpred_epred.md">here</a> for why it will not always be the case (e.g.&nbsp;in lognormal models!)</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">brms</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstantools/reference/posterior_linpred.html">posterior_linpred</a></span><span class="op">(</span><span class="va">mod</span>, transform <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co"># expected response, without sigma</span></span>
 <span><span class="co"># # matrix with n_samples x n_observations</span></span>
@@ -494,7 +508,7 @@ Comparison: 1 - 0</code></pre>
 </div>
 </section><section id="using-tidybayes" class="level3"><h3 class="anchored" data-anchor-id="using-tidybayes">using <code>tidybayes()</code>
 </h3>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">tidybayes</span><span class="fu">::</span><span class="fu"><a href="https://mjskay.github.io/tidybayes/reference/add_predicted_draws.html">add_linpred_draws</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod</span>, newdata <span class="op">=</span> <span class="va">dat</span>, transform <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
 <span><span class="co"># tibbles with n_observation_n_chains*n_draws lines</span></span>
 <span><span class="va">b</span> <span class="op">&lt;-</span><span class="fu">tidybayes</span><span class="fu">::</span><span class="fu"><a href="https://mjskay.github.io/tidybayes/reference/add_predicted_draws.html">add_epred_draws</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod</span>, newdata <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
@@ -518,7 +532,7 @@ Comparison: 1 - 0</code></pre>
 </h3>
 <p>I use <a href="(https://marginaleffects.com/bonus/brms.html)">type = “response”: Compute posterior draws of the expected value using the brms::posterior_epred function.</a> to get the expected values.</p>
 <p>Get the draws:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># get the estimates on a unit level, conditional on all other predictors being average</span></span>
 <span></span>
 <span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html">predictions</a></span><span class="op">(</span><span class="va">mod</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span> </span>
@@ -529,7 +543,7 @@ Comparison: 1 - 0</code></pre>
 <span><span class="va">c</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/get_draws.html">get_draws</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span> <span class="co"># or (a), gives a tibble with n_chain*n_sample*n_observations rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Compare conditions, overall numbers</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html">avg_predictions</a></span><span class="op">(</span><span class="va">mod</span>, type <span class="op">=</span> <span class="st">"response"</span>, by <span class="op">=</span> <span class="st">"Trt"</span><span class="op">)</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -552,7 +566,7 @@ Type: response</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># tibble with one line, mean of n_observatons (including those that had NA and were not part of the model if you did not impute)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Directly compare the two conditions</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#compare the estimates by taking the difference</span></span>
 <span></span>
 <span><span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/comparisons.html">comparisons</a></span><span class="op">(</span><span class="va">mod</span>, by <span class="op">=</span> <span class="st">"Trt"</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -582,14 +596,14 @@ Comparison: 1 - 0</code></pre>
 <p>Here, we produce predictions for either our existing data frame, or new data. The predictions are now on the true outcome level, i.e.&nbsp;not expected number of seizures, but actual predictions of actual integers for each row of the data frame.</p>
 <section id="using-brms-1" class="level3"><h3 class="anchored" data-anchor-id="using-brms-1">using <code>brms</code>
 </h3>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">brms</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstantools/reference/posterior_predict.html">posterior_predict</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
 <span><span class="co"># prediction of individual responses, with sigma</span></span>
 <span><span class="co"># matrix with n_samples (rows) x n_observations (cols)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="using-tidybayes-1" class="level3"><h3 class="anchored" data-anchor-id="using-tidybayes-1">using <code>tidybayes</code>
 </h3>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">tidybayes</span><span class="fu">::</span><span class="fu"><a href="https://mjskay.github.io/tidybayes/reference/add_predicted_draws.html">add_predicted_draws</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod</span>, newdata <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu">tidybayes</span><span class="fu">::</span><span class="fu"><a href="https://mjskay.github.io/tidybayes/reference/add_predicted_draws.html">predicted_draws</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod</span>, newdata <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span></span>
@@ -601,7 +615,7 @@ Comparison: 1 - 0</code></pre>
 <p>These are not always the same since there is now “sampling error” included in the predictions. Also, if you rerun each line, there will be different .predictions made.</p>
 </section><section id="using-marinaleffects" class="level3"><h3 class="anchored" data-anchor-id="using-marinaleffects">using <code>marinaleffects</code>
 </h3>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html">predictions</a></span><span class="op">(</span><span class="va">mod</span>, type <span class="op">=</span> <span class="st">"prediction"</span><span class="op">)</span></span>
 <span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html">predictions</a></span><span class="op">(</span><span class="va">mod</span>, type <span class="op">=</span> <span class="st">"prediction"</span>, newdata <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span><span class="co">#type = "prediction": Compute posterior draws of the posterior predictive distribution using the brms::posterior_predict function.</span></span>
@@ -623,7 +637,7 @@ Comparison: 1 - 0</code></pre>
 <section id="link-level-comparison" class="level3"><h3 class="anchored" data-anchor-id="link-level-comparison">Link-level comparison</h3>
 <p>First, I compare the output on the link-level. This is easiest because the posterior draws should directly translate to the results of <code>summary(mod)</code>. I take the mean of the difference between the two treatment conditions, and as uncertainty-intervals, I take the 95%-equally-tailed-intervals (eti) around that mean. Another option is the 95% highest-density-interval (hdi). The eti is the default in <code>marginaleffects</code> and in <code><a href="https://rdrr.io/pkg/nlme/man/fixed.effects.html">fixef()</a></code>, and it can easily be computed using the <code><a href="https://rdrr.io/r/stats/quantile.html">quantile()</a></code> function. This choice for central tendency and uncertainty makes the results directly comparable betweent the packages / approaches.</p>
 <p>Let’s look first at the increase of seizures between the two treatment groups with the different methods</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">link_comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>, </span>
 <span>                          estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span>, </span>
 <span>                          lowerCI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span>, </span>
@@ -762,7 +776,7 @@ Caused by warning in `Ops.factor()`:
 <span>          upperCI <span class="op">=</span> <span class="va">margEf_avgComp</span><span class="op">$</span><span class="va">conf.high</span><span class="op">)</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now, put together the table.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb50"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">link_comparison</span> <span class="op">&lt;-</span> <span class="va">link_comparison</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/add_row.html">add_row</a></span><span class="op">(</span><span class="va">fixef_row</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/add_row.html">add_row</a></span><span class="op">(</span><span class="va">tidybayes_row</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -789,7 +803,7 @@ Caused by warning in `Ops.factor()`:
 </div>
 <p>Interpreting the table is difficult because it is on the link-level.</p>
 <p>Let’s look at the plots to see what is exactly equal:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb52"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tidybayes_draws</span> <span class="op">&lt;-</span> <span class="fu">tidybayes</span><span class="fu">::</span><span class="fu"><a href="https://mjskay.github.io/tidybayes/reference/add_predicted_draws.html">add_linpred_draws</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod</span>, </span>
 <span>                                  newdata <span class="op">=</span> <span class="va">dat</span>, </span>
 <span>                                  transform <span class="op">=</span> <span class="cn">F</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -807,15 +821,15 @@ Caused by warning in `Ops.factor()`:
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span><span class="va">tidybayes_draws</span>, <span class="va">marginaleff_pred_draws</span>, nrow <span class="op">=</span> <span class="fl">2</span>, </span>
 <span>                   labels <span class="op">=</span> <span class="st">"poisson estimates on the link level"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/linkplots-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/linkplots-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>
 </div>
 </section><section id="expected-response-level-comparison" class="level3"><h3 class="anchored" data-anchor-id="expected-response-level-comparison">Expected response level comparison</h3>
 <p>Now, let’s look at the numbers on the response level. I compare between the back-transformed <code><a href="https://rdrr.io/pkg/nlme/man/fixed.effects.html">fixef()</a></code> result and the results of <code>tidybayes</code> and <code>marginaleffects</code>. I am not entirely sure, if the back-transformation by hand is correct though.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb53"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">response_comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>, </span>
 <span>                          estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span>, </span>
 <span>                          lowerCI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span>, </span>
@@ -948,7 +962,7 @@ Caused by warning in `Ops.factor()`:
 <span>          lowerCI <span class="op">=</span> <span class="va">margEf_avgComp</span><span class="op">$</span><span class="va">conf.low</span>, </span>
 <span>          upperCI <span class="op">=</span> <span class="va">margEf_avgComp</span><span class="op">$</span><span class="va">conf.high</span><span class="op">)</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb54"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">response_comparison</span> <span class="op">&lt;-</span> <span class="va">response_comparison</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/add_row.html">add_row</a></span><span class="op">(</span><span class="va">fixef_row</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/add_row.html">add_row</a></span><span class="op">(</span><span class="va">tidybayes_row</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -973,7 +987,7 @@ Caused by warning in `Ops.factor()`:
 </div>
 </div>
 <p>The numbers in this table are mode interpretable. They are the expected difference in seizures between the treatment and the control group. However, the CI-numbers again are not exactly the same. the plots to see what is exactly equal:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb56"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tidybayes_draws</span> <span class="op">&lt;-</span> <span class="fu">tidybayes</span><span class="fu">::</span><span class="fu"><a href="https://mjskay.github.io/tidybayes/reference/add_predicted_draws.html">add_linpred_draws</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod</span>, </span>
 <span>                                  newdata <span class="op">=</span> <span class="va">dat</span>, </span>
 <span>                                  transform <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -991,15 +1005,15 @@ Caused by warning in `Ops.factor()`:
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span><span class="va">tidybayes_draws</span>, <span class="va">marginaleff_pred_draws</span>, nrow <span class="op">=</span> <span class="fl">2</span>, </span>
 <span>                   labels <span class="op">=</span> <span class="st">"poisson estimates on the response level"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/respplots-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/respplots-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>
 </div>
 </section></section><section id="bernoulli-logistic-regression" class="level2"><h2 class="anchored" data-anchor-id="bernoulli-logistic-regression">Bernoulli / Logistic regression</h2>
 <p>Now, let’s walk though another example, this time a logistic regression, with a new link function, the <code>logit()</code>. To make such a model, let’s dichotomize the <code>count</code> column into “many” and “not many” seizures, and predict it using the <code>Trt</code> variable again.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb57"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat_logistic</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>count_many <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span><span class="va">count</span> <span class="op">&lt;</span> <span class="fl">10</span> <span class="op">~</span> <span class="fl">0</span>, </span>
 <span>                                <span class="va">count</span> <span class="op">&gt;=</span> <span class="fl">10</span> <span class="op">~</span> <span class="fl">1</span>, </span>
@@ -1013,7 +1027,7 @@ Caused by warning in `Ops.factor()`:
 </div>
 <section id="link-level-comparison-1" class="level3"><h3 class="anchored" data-anchor-id="link-level-comparison-1">Link-level comparison</h3>
 <p>follow the same steps as above in the poisson model</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb58"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">link_comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>, </span>
 <span>                          estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span>, </span>
 <span>                          lowerCI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span>, </span>
@@ -1147,7 +1161,7 @@ Caused by warning in `Ops.factor()`:
 <span>          upperCI <span class="op">=</span> <span class="va">margEf_avgComp</span><span class="op">$</span><span class="va">conf.high</span><span class="op">)</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now, put together the table.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb59"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">link_comparison</span> <span class="op">&lt;-</span> <span class="va">link_comparison</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/add_row.html">add_row</a></span><span class="op">(</span><span class="va">fixef_row</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/add_row.html">add_row</a></span><span class="op">(</span><span class="va">tidybayes_row</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -1173,7 +1187,7 @@ Caused by warning in `Ops.factor()`:
 </div>
 </div>
 <p>And look at the plots to verify the output of <code>tidybayes</code> and <code>marginaleffects</code> are the same</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb61"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tidybayes_draws</span> <span class="op">&lt;-</span> <span class="fu">tidybayes</span><span class="fu">::</span><span class="fu"><a href="https://mjskay.github.io/tidybayes/reference/add_predicted_draws.html">add_linpred_draws</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod_logistic</span>, </span>
 <span>                                  newdata <span class="op">=</span> <span class="va">dat_logistic</span>, </span>
 <span>                                  transform <span class="op">=</span> <span class="cn">F</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -1191,15 +1205,15 @@ Caused by warning in `Ops.factor()`:
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span><span class="va">tidybayes_draws</span>, <span class="va">marginaleff_pred_draws</span>, nrow <span class="op">=</span> <span class="fl">2</span>, </span>
 <span>                   labels <span class="op">=</span> <span class="st">"logistic regression estimates on the link level"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/link plot logistic-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/link plot logistic-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>
 </div>
 </section><section id="expected-response-level-comparison-1" class="level3"><h3 class="anchored" data-anchor-id="expected-response-level-comparison-1">Expected response level comparison</h3>
 <p>Now, let’s look at the numbers on the response level. Because we will look at the estimated increase of the probability of having “many” seizures, the by-hand calculations become a bit complicated. Because of the non-linearity of the link-function, and the model-specification, the increase needs to be calculated by first adding Intercept and beta-coefficient, then inverse-linking it, then doing the same with only the intercept, then subtracting these two from one another. The numbers are a good fit for the <code><a href="https://paul-buerkner.github.io/brms/reference/conditional_effects.brmsfit.html">conditional_effects()</a></code> plot and therefore, I trust them.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb62"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">response_comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>, </span>
 <span>                          estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span>, </span>
 <span>                          lowerCI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="op">)</span>, </span>
@@ -1339,7 +1353,7 @@ Caused by warning in `Ops.factor()`:
 <span>          lowerCI <span class="op">=</span> <span class="va">margEf_avgComp</span><span class="op">$</span><span class="va">conf.low</span>, </span>
 <span>          upperCI <span class="op">=</span> <span class="va">margEf_avgComp</span><span class="op">$</span><span class="va">conf.high</span><span class="op">)</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb63"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">response_comparison</span> <span class="op">&lt;-</span> <span class="va">response_comparison</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/add_row.html">add_row</a></span><span class="op">(</span><span class="va">fixef_row</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/add_row.html">add_row</a></span><span class="op">(</span><span class="va">tidybayes_row</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -1365,7 +1379,7 @@ Caused by warning in `Ops.factor()`:
 </div>
 <p>The numbers in this table indicate the increase in probability of having “many” seizures if one is in the treatment group compared to the control group. I have no clue as to why they are not the same.</p>
 <p>And look at the plot again to verify that <code>tidybayes</code> and <code>marginaleffects</code> give the same</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb65"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tidybayes_draws</span> <span class="op">&lt;-</span> <span class="fu">tidybayes</span><span class="fu">::</span><span class="fu"><a href="https://mjskay.github.io/tidybayes/reference/add_predicted_draws.html">add_linpred_draws</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod_logistic</span>, </span>
 <span>                                  newdata <span class="op">=</span> <span class="va">dat_logistic</span>, </span>
 <span>                                  transform <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -1383,8 +1397,8 @@ Caused by warning in `Ops.factor()`:
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span><span class="va">tidybayes_draws</span>, <span class="va">marginaleff_pred_draws</span>, nrow <span class="op">=</span> <span class="fl">2</span>, </span>
 <span>                   labels <span class="op">=</span> <span class="st">"logistic regression estimates on the response level"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/resp plot logistic-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/resp plot logistic-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>
@@ -1393,7 +1407,7 @@ Caused by warning in `Ops.factor()`:
 <p>Lets say, we want to estimate the number of seizures by the interaction of Base and Treatment, controlled for age, i.e.&nbsp;the following model formula:</p>
 <p>$count Base * Trt + zAge $</p>
 <p>To simplify, I will dichotomize the <code>Base</code> variable with a median-split. I will show how to get at the estimated effects of the main effects, interactions, and how to make sense of the age predictor, which is continuous. I will get the draws for expected values, not the predicted ones.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb66"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">realistic_data</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Base_medianspl <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span><span class="va">Base</span> <span class="op">&gt;=</span> <span class="fl">22</span> <span class="op">~</span> <span class="st">"many"</span>, </span>
 <span>                                    <span class="va">Base</span> <span class="op">&lt;</span> <span class="fl">22</span> <span class="op">~</span> <span class="st">"few"</span>, </span>
@@ -1411,7 +1425,7 @@ Caused by warning in `Ops.factor()`:
 </div>
 <section id="main-effect-treatment" class="level2"><h2 class="anchored" data-anchor-id="main-effect-treatment">Main effect treatment</h2>
 <p>First look at the average effect of the treatment, averaged over all <code>Base</code> values, and for a <code>zAge</code> of 0, i.e.&nbsp;average age.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb67"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">### descriptives</span></span>
 <span><span class="va">draws</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">.draw</span>, <span class="va">Trt</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -1456,15 +1470,15 @@ Caused by warning in `Ops.factor()`:
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.epred</span>, color <span class="op">=</span> <span class="va">Trt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/real maineff trt-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/real maineff trt-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Interpretation: Patients with no treatment had an expected average seizure number of 8.59 (CI = [8.09; 9.13]), patients with treatment had an expected average seizure number of 7.97 (CI = [7.50; 8.46]). The difference between the two groups was 0.623 (CI = [-0.0180 1.38]).</p>
 <p>This can also be calculated with the <code>marginaleffects</code> package:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb74"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="st">"marginaleffects_posterior_center"</span> <span class="op">=</span> <span class="st">"mean"</span>, <span class="co"># not the default</span></span>
 <span>        <span class="st">"marginaleffects_posterior_interval"</span> <span class="op">=</span> <span class="st">"eti"</span><span class="op">)</span></span>
 <span></span>
@@ -1505,7 +1519,7 @@ Type: link</code></pre>
 </section><section id="main-effect-base" class="level2"><h2 class="anchored" data-anchor-id="main-effect-base">Main effect <code>Base</code>
 </h2>
 <p>To get to the “effect” of the Baseline of seizures, averaged over both treatment groups, and for the <code>zAge</code> of 0.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb79"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">draws</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">.draw</span>, <span class="va">Base_medianspl</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>.epred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">.epred</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -1549,15 +1563,15 @@ Type: link</code></pre>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.epred</span>, color <span class="op">=</span> <span class="va">Base_medianspl</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/unnamed-chunk-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Patients starting with “few” seizures had an expected seizure number of 3.03 (CI = [2.71; 3.36]), those with “many” had an expected seizure number of 12.67 (CI = [12.06; 13.27]). The difference of expected seizures was 9.64 (CI = [8.95; 10.3]). Whether or not this difference is meaningful depends on the ROPE - the region of practical equivalence - that one should define beforehand. This is another topic in its own right.</p>
 <p>This can also be calculated with the <code>marginaleffects</code> package:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb86"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="st">"marginaleffects_posterior_center"</span> <span class="op">=</span> <span class="st">"mean"</span>, <span class="co"># not the default</span></span>
 <span>        <span class="st">"marginaleffects_posterior_interval"</span> <span class="op">=</span> <span class="st">"eti"</span><span class="op">)</span></span>
 <span></span>
@@ -1598,7 +1612,7 @@ Type: response</code></pre>
 </section><section id="interaction-treatment-and-base" class="level2"><h2 class="anchored" data-anchor-id="interaction-treatment-and-base">Interaction <code>treatment</code> and <code>base</code>
 </h2>
 <p>The interaction shows, whether the treatment-effect differs in the two clusters of patients, i.e.&nbsp;whether one patient group profits more from the treatment. See <a href="https://marginaleffects.com/chapters/interactions.html">this site</a> for more infos about the <code>marginaleffects</code>side of things.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb91"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># difference of treatment effect in the two groups</span></span>
 <span><span class="va">draws</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">.draw</span>, <span class="va">Base_medianspl</span>, <span class="va">Trt</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -1650,15 +1664,15 @@ using the `.groups` argument.</code></pre>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">.</span><span class="op">~</span><span class="va">Base_medianspl</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/interaction-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/interaction-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The treatment reduced expected seizure counts in both groups, but to different degrees. For people who started the treatment with “few” seizures, the reduction was 0.950 (CI = [0.295; 1.59]), for those with “many” seizures, it was 3.10 (CI = [1.83; 4.35]). The difference of the group-differences was 2.15 (CI = [0.725; 3.56]). Whether this difference is big enough to make us care should be determined with a ROPE. But this approach allows to formulate a ROPE on the outcome level and then compare the expected values to this ROPE.</p>
 <p>This can also be calculated with the <code>marginaleffects</code> package, See <a href="#%20see%20https://marginaleffects.com/chapters/interactions.html#categorical-by-categorical">here</a> for more. For a contrast between <code><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html">predictions()</a></code> and <code><a href="https://rdrr.io/pkg/marginaleffects/man/comparisons.html">comparisons()</a></code>, see <a href="https://marginaleffects.com/chapters/comparisons.html#sec-comparisons_average_predictions_vs_comparisons">here</a>.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb98"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="st">"marginaleffects_posterior_center"</span> <span class="op">=</span> <span class="st">"mean"</span>, <span class="co"># not the default</span></span>
 <span>        <span class="st">"marginaleffects_posterior_interval"</span> <span class="op">=</span> <span class="st">"eti"</span><span class="op">)</span></span>
 <span></span>
@@ -1717,8 +1731,8 @@ Comparison: 1 - 0</code></pre>
 <span>                                 type <span class="op">=</span> <span class="st">"response"</span>, </span>
 <span>                                 by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Base_medianspl"</span>, <span class="st">"Trt"</span><span class="op">)</span><span class="op">)</span> <span class="co"># this give the same plot as: conditional_effects(mod_realistic)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>
@@ -1726,47 +1740,47 @@ Comparison: 1 - 0</code></pre>
 </section><section id="slopes" class="level2"><h2 class="anchored" data-anchor-id="slopes">Slopes</h2>
 <p>The interpretation of the slope-parameter in a simple linear regression is simple: one unit change of the predictor translates to a slope-parameter-sized change in the expected value of dependent variable. In a generalized linear regression, this becomes more complicated: one unit change of the predictor translates to a slope-parameter-sized change in the link-function-transformed expected value of the dependent variable. This also means that a one unit increase on the link level does not lead to the same increase for all values of the predictor. Let’s illustrate this using the age-predictor. I cannot get my head around how to do this with <code>tidybayes</code>, so I will only do it with <code>marginaleffects</code>, which provides very nice functions. See <a href="marginaleffects.com/bonus/brms.html#slopes">here</a> for more infos.</p>
 <p>First, let’s look at the overall effect of age on seizures. We can see that seizures decrease in older patients. This is true for both Base-groups and for both treatment groups.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb106"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/plot_predictions.html">plot_predictions</a></span><span class="op">(</span><span class="va">mod_realistic</span>,</span>
 <span>  variables <span class="op">=</span> <span class="st">"zAge"</span>,</span>
 <span>  condition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"zAge"</span>, <span class="st">"Trt"</span>, <span class="st">"Base_medianspl"</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span><span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"How age impacts the seizures."</span>, </span>
 <span>       subtitle <span class="op">=</span> <span class="st">"For the different conditions."</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Next, lets look at how the slope (or the effect of age on seizures) changes over the different ages.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb107"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/plot_slopes.html">plot_slopes</a></span><span class="op">(</span><span class="va">mod_realistic</span>,</span>
 <span>  variables <span class="op">=</span> <span class="st">"zAge"</span>,</span>
 <span>  condition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"zAge"</span>, <span class="st">"Trt"</span>, <span class="st">"Base_medianspl"</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"How the effect of age on the seizures changes, as age increases."</span>, </span>
 <span>       subtitle <span class="op">=</span> <span class="st">"For the different conditions."</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>This plot becomes a line if we go to the link-level, which makes sense: the slope is the same for all ages on the link level, because it is a line.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb108"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/plot_slopes.html">plot_slopes</a></span><span class="op">(</span><span class="va">mod_realistic</span>,</span>
 <span>  variables <span class="op">=</span> <span class="st">"zAge"</span>,</span>
 <span>  condition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"zAge"</span>, <span class="st">"Trt"</span>, <span class="st">"Base_medianspl"</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"link"</span><span class="op">)</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/unnamed-chunk-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>But to describe the results, we are interested in the average, or marginal effect of age on expected seizures. To get to this, we first plot:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb109"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mfx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/slopes.html">slopes</a></span><span class="op">(</span><span class="va">mod_realistic</span>,</span>
 <span>    variables <span class="op">=</span> <span class="st">"zAge"</span>,</span>
 <span>    newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/datagrid.html">datagrid</a></span><span class="op">(</span>Trt <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">1</span>, Base_medianspl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"many"</span>, <span class="st">"few"</span><span class="op">)</span><span class="op">)</span>, </span>
@@ -1780,14 +1794,14 @@ Comparison: 1 - 0</code></pre>
 <span>         fill <span class="op">=</span> <span class="st">"Treatment"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">.</span><span class="op">~</span><span class="va">Base_medianspl</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The best-off patients (in terms of age benefit, not in general) are the ones with many seizures to begin with and no treatment: Their age reduces their seizures the most per year of life (up to 1.5 seizures for example). To get the numbers of the average slope, we can do:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb110"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/slopes.html">avg_slopes</a></span><span class="op">(</span><span class="va">mod_realistic</span>, type <span class="op">=</span> <span class="st">"response"</span>, variables <span class="op">=</span> <span class="st">"zAge"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -1800,7 +1814,7 @@ Comparison: dY/dX</code></pre>
 </div>
 </div>
 <p>And to get that in a plot:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb112"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mfx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/slopes.html">slopes</a></span><span class="op">(</span><span class="va">mod_realistic</span>,</span>
 <span>    variables <span class="op">=</span> <span class="st">"zAge"</span>, </span>
 <span>    type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -1812,22 +1826,22 @@ Comparison: dY/dX</code></pre>
 <span>         y <span class="op">=</span> <span class="st">"Posterior density"</span>,</span>
 <span>         fill <span class="op">=</span> <span class="st">"Treatment"</span><span class="op">)</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>This plot makes it clear that the single slope for age is limited in its usefullness: for all combinations of treatment and baseline seizures, age decreases the number of seizures, but it makes a big difference for the age-effect whether a patient had many or few seizures to begin with:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb113"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">mfx</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">draw</span>, fill <span class="op">=</span> <span class="va">Base_medianspl</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://mjskay.github.io/ggdist/reference/stat_halfeye.html">stat_halfeye</a></span><span class="op">(</span>slab_alpha <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Marginal Effect of Age on Seizures"</span>,</span>
 <span>         y <span class="op">=</span> <span class="st">"Posterior density"</span>,</span>
 <span>         fill <span class="op">=</span> <span class="st">"Treatment"</span><span class="op">)</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="index_linkfun_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="4200"></p>
 </figure>
 </div>
 </div>

@@ -98,7 +98,9 @@ names(grants) <- NULL
 n_row <- nrow(grants)
 kableExtra::kable(grants, kable_format = "html",  align = c("l", "l", "r", "r")) |> 
   kableExtra::column_spec(1, 
-                          width_min = "4cm") |> 
+                          width_min = "3cm") |>
+    kableExtra::column_spec(2, 
+                          width_min = "3cm") |> 
   kableExtra::row_spec(row = 1:n_row, 
                        extra_css = "line-height: 1.2;
                        padding: 10px") |> 
