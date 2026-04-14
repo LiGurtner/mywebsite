@@ -3,7 +3,7 @@ title: "Daten verstehen und kommunizieren"
 runningheader: "Daten verstehen und kommunizieren" # only for pdf output
 subtitle: "Donnerstag, 10:15 - 12, vonRoll B005, [KSL](https://ksl.unibe.ch/KSL/kurzansicht?2&stammNr=478535&semester=HS2022&lfdNr=0),  [ILIAS](https://ilias.unibe.ch/goto.php?target=crs_2445306&client_id=ilias3_unibe)" # only for html output
 author: "Lilla Gurtner - lilla.gurtner@unibe.ch"
-date: ""
+date: "2023"
 toc: TRUE
 output:
   tufte::tufte_html: 
